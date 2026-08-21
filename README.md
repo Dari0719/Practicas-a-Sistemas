@@ -144,7 +144,7 @@ Las instrucciones específicas para compilar y ejecutar la aplicación serán ag
 | Integrante                  |
 | --------------------------- |
 | José David Hurtado Espinosa |
-| Deivid Alejandro Camacho    |
+| Deivid Alejandro Camacho Mendez   |
 | Darien Stiben Diaz Suarez   |
 
 ---

@@ -1,7 +1,7 @@
-package com.juego.controller;
+package co.edu.poli.allten.controller;
 
-import com.juego.model.GameModel;
-import com.juego.view.GameView;
+import co.edu.poli.allten.model.GameModel;
+import co.edu.poli.allten.view.GameView;
 import javafx.scene.Scene;
 
 public class GameController {

@@ -1,4 +1,4 @@
-package com.juego;
+package co.edu.poli.allten;
 
 import static org.junit.Assert.assertTrue;
 

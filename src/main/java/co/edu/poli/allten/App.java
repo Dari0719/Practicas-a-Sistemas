@@ -1,8 +1,8 @@
-package com.juego;
+package co.edu.poli.allten;
 
-import com.juego.controller.GameController;
-import com.juego.model.GameModel;
-import com.juego.view.GameView;
+import co.edu.poli.allten.controller.GameController;
+import co.edu.poli.allten.model.GameModel;
+import co.edu.poli.allten.view.GameView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

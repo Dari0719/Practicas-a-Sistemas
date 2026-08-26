@@ -1,4 +1,4 @@
-package com.juego.view;
+package co.edu.poli.allten.view;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

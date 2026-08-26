@@ -1,4 +1,4 @@
-package com.juego.model;
+package co.edu.poli.allten.model;
 
 public class GameModel {
 	private boolean gameStarted;

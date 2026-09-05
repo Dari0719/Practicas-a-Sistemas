@@ -69,12 +69,28 @@ Para la primera version del juego se propone guardar el historial de partidas y 
 
 - `id`: identificador unico de la partida.
 - `player_id`: jugador que realizo la partida.
-- `score`: puntaje final obtenido.
 - `started_at`: fecha y hora de inicio.
 - `ended_at`: fecha y hora de finalizacion.
-- `status`: estado de la partida, por ejemplo `IN_PROGRESS`, `WON` o `ABANDONED`.
+- `duration_ms`: tiempo total empleado, expresado en milisegundos.
+- `attempts`: cantidad de intentos realizados.
+- `status`: estado de la partida, por ejemplo `IN_PROGRESS`, `COMPLETED` o `ABANDONED`.
 
-El tiempo de la partida se calculara a partir de `started_at` y `ended_at`. No se guardara una segunda columna para la duracion, porque ese valor se puede obtener con una consulta y asi se evita duplicar informacion.
+La partida se completa cuando el jugador resuelve correctamente los diez objetivos. Al finalizar, la aplicacion mostrara el tiempo total y guardara el resultado en `games`. `duration_ms` permite comparar los tiempos con precision, mientras que `started_at` y `ended_at` conservan el momento exacto de la partida.
+
+El mejor tiempo de cada jugador se puede consultar con:
+
+```sql
+SELECT
+    p.name,
+    MIN(g.duration_ms) AS best_time_ms
+FROM players p
+JOIN games g ON g.player_id = p.id
+WHERE g.status = 'COMPLETED'
+GROUP BY p.id, p.name
+ORDER BY best_time_ms ASC;
+```
+
+La tabla de clasificacion se obtiene a partir del historial de partidas; no se guardara una copia separada del mejor tiempo. Asi se conservan los resultados anteriores y se evita duplicar informacion.
 
 Por ahora no se almacenaran contrasenas ni datos personales innecesarios. Tampoco se guardaran todas las operaciones realizadas; ese detalle se podra agregar despues si las reglas definitivas del juego lo requieren.
 

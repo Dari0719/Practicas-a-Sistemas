@@ -56,6 +56,28 @@ jdbc:mysql://localhost:3306/allten
 
 El metodo `getConnection()` lee `ALLTEN_DB_USER` y `ALLTEN_DB_PASSWORD` y devuelve una instancia de `java.sql.Connection`. Si falta alguna variable, se informa que debe configurarse antes de conectar.
 
+## Datos que se van a persistir
+
+Para la primera version del juego se propone guardar el historial de partidas y los datos necesarios para consultar el rendimiento del jugador.
+
+### Tabla `players`
+
+- `id`: identificador unico del jugador.
+- `name`: nombre del jugador.
+
+### Tabla `games`
+
+- `id`: identificador unico de la partida.
+- `player_id`: jugador que realizo la partida.
+- `score`: puntaje final obtenido.
+- `started_at`: fecha y hora de inicio.
+- `ended_at`: fecha y hora de finalizacion.
+- `status`: estado de la partida, por ejemplo `IN_PROGRESS`, `WON` o `ABANDONED`.
+
+El tiempo de la partida se calculara a partir de `started_at` y `ended_at`. No se guardara una segunda columna para la duracion, porque ese valor se puede obtener con una consulta y asi se evita duplicar informacion.
+
+Por ahora no se almacenaran contrasenas ni datos personales innecesarios. Tampoco se guardaran todas las operaciones realizadas; ese detalle se podra agregar despues si las reglas definitivas del juego lo requieren.
+
 ## Validacion
 
 Para compilar el proyecto y ejecutar las pruebas:

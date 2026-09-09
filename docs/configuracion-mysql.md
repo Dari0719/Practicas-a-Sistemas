@@ -1,6 +1,6 @@
 # Configuracion inicial de MySQL
 
-## Objetivo
+## OBJETIVOS
 
 Configurar la conexion inicial del proyecto All Ten con una base de datos relacional MySQL para preparar la persistencia del juego.
 

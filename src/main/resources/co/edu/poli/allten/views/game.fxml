@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane id="game-root" prefHeight="680.0" prefWidth="760.0" styleClass="game-root" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <BorderPane styleClass="game-header">
+            <left>
+                <Label text="ALLTEN" styleClass="game-brand" />
+            </left>
+            <center>
+                <Label id="player-label" styleClass="player-label" />
+            </center>
+            <right>
+                <Button id="back-button" text="Salir" styleClass="back-button" />
+            </right>
+            <padding>
+                <Insets top="14.0" right="28.0" bottom="14.0" left="28.0" />
+            </padding>
+        </BorderPane>
+    </top>
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="18.0" styleClass="game-content">
+            <HBox alignment="CENTER_LEFT" maxWidth="562.0" spacing="24.0">
+                <Label id="operation-label" styleClass="operation-label" />
+                <Label text="Completa los objetivos usando los cuatro números" styleClass="hint-label" />
+            </HBox>
+            <GridPane id="objectives-grid" hgap="5.0" vgap="5.0" maxWidth="562.0" />
+            <TextField id="answer-field" promptText="Construye tu expresión aquí" prefHeight="56.0" maxWidth="562.0" styleClass="answer-field" />
+            <VBox alignment="CENTER" spacing="8.0" maxWidth="420.0" styleClass="keypad">
+                <HBox alignment="CENTER" spacing="8.0">
+                    <Button text="1" styleClass="number-key" />
+                    <Button text="+" styleClass="operator-key" />
+                    <Button text="3" styleClass="number-key" />
+                </HBox>
+                <HBox alignment="CENTER" spacing="8.0">
+                    <Button text="(" styleClass="operator-key" />
+                    <Button text="×" styleClass="operator-key" />
+                    <Button text="÷" styleClass="operator-key" />
+                    <Button text=")" styleClass="operator-key" />
+                </HBox>
+                <HBox alignment="CENTER" spacing="8.0">
+                    <Button text="3" styleClass="number-key" />
+                    <Button text="−" styleClass="operator-key" />
+                    <Button text="3" styleClass="number-key" />
+                </HBox>
+                <HBox alignment="CENTER" spacing="8.0">
+                    <Button id="clear-button" text="⌫" styleClass="action-key" />
+                    <Button id="check-button" text="=" styleClass="equals-key" />
+                    <Button id="reset-expression-button" text="↶" styleClass="action-key" />
+                </HBox>
+            </VBox>
+            <Label id="game-status-label" styleClass="game-status-label" />
+            <padding>
+                <Insets top="24.0" right="20.0" bottom="24.0" left="20.0" />
+            </padding>
+        </VBox>
+    </center>
+</BorderPane>

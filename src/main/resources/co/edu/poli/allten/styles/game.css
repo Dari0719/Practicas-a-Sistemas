@@ -1,0 +1,176 @@
+.game-root,
+.game-content {
+    -fx-background-color: #e9e8e6;
+}
+
+.game-header {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d8d8d8;
+    -fx-border-width: 0 0 1 0;
+}
+
+.game-brand {
+    -fx-text-fill: #6a9f37;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.player-label {
+    -fx-text-fill: #193f61;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.back-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #193f61;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.operation-label {
+    -fx-text-fill: #6a9f37;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.hint-label {
+    -fx-text-fill: #6c7378;
+    -fx-font-size: 10px;
+}
+
+.objective-row {
+    -fx-background-color: #dfe2e3;
+    -fx-background-radius: 3px;
+    -fx-padding: 0 8px;
+}
+
+.objective-row.completed {
+    -fx-background-color: #6a9f37;
+}
+
+.objective-row.active {
+    -fx-border-color: #6a9f37;
+    -fx-border-width: 2px;
+}
+
+.objective-expression {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.objective-number {
+    -fx-text-fill: #193f61;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.objective-row.completed .objective-number {
+    -fx-text-fill: #ffffff;
+}
+
+.answer-field {
+    -fx-background-color: #dfe2e3;
+    -fx-background-radius: 12px;
+    -fx-border-color: transparent;
+    -fx-padding: 0 16px;
+    -fx-font-size: 16px;
+    -fx-text-fill: #193f61;
+}
+
+.keypad {
+    -fx-padding: 2px;
+}
+
+.number-key,
+.operator-key,
+.action-key,
+.equals-key {
+    -fx-min-width: 58px;
+    -fx-min-height: 58px;
+    -fx-background-radius: 50%;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.number-key {
+    -fx-background-color: #4b5055;
+    -fx-text-fill: #ffffff;
+}
+
+.number-key:disabled {
+    -fx-background-color: #dfe2e3;
+    -fx-text-fill: #aeb3b6;
+    -fx-opacity: 0.42;
+}
+
+.operator-key,
+.action-key {
+    -fx-background-color: #193f61;
+    -fx-text-fill: #ffffff;
+}
+
+.equals-key {
+    -fx-background-color: #193f61;
+    -fx-text-fill: #ffffff;
+}
+
+.game-status-label {
+    -fx-text-fill: #b3261e;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.summary-root {
+    -fx-background-color: #e9e8e6;
+}
+
+.summary-panel {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12px;
+    -fx-border-color: #dfe2e3;
+    -fx-border-radius: 12px;
+}
+
+.summary-title {
+    -fx-text-fill: #6a9f37;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.summary-subtitle {
+    -fx-text-fill: #6c7378;
+    -fx-font-size: 12px;
+}
+
+.summary-time {
+    -fx-text-fill: #193f61;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+.summary-ranking {
+    -fx-text-fill: #193f61;
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.summary-button,
+.summary-secondary-button {
+    -fx-min-width: 220px;
+    -fx-min-height: 38px;
+    -fx-background-radius: 20px;
+    -fx-font-weight: bold;
+}
+
+.summary-button {
+    -fx-background-color: #193f61;
+    -fx-text-fill: white;
+}
+
+.summary-secondary-button {
+    -fx-background-color: #dfe2e3;
+    -fx-text-fill: #193f61;
+}

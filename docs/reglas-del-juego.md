@@ -3,6 +3,7 @@
 ## Números disponibles
 
 Cada reto proporciona cuatro números.
+images/!(image.png)
 
 ## Objetivos
 

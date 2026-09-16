@@ -1,40 +1,42 @@
 # Reglas del juego
 
-## Números disponibles
+## Inicio de la partida
 
-Cada reto proporciona cuatro números.
+Al iniciar una partida, el sistema genera cuatro números. Esos cuatro números permanecen disponibles durante toda la partida y deben utilizarse para resolver todos los objetivos.
 
 ## Objetivos
 
-El jugador debe conseguir los resultados correspondientes a los objetivos del 1 al 10.
+El jugador debe encontrar, de forma independiente, una expresión matemática válida para cada uno de los valores enteros del 1 al 10. Cada expresión debe producir exactamente el objetivo que se está resolviendo.
 
 ## Uso de los números
 
-Los cuatro números disponibles deben utilizarse exactamente una vez para construir cada solución.
+En cada solución deben utilizarse los cuatro números generados por el sistema, y cada uno debe utilizarse exactamente una vez. Esta condición se aplica por separado a cada objetivo: no se comparten ni se consumen números entre soluciones.
 
-## Fracciones
+## Fracciones y números negativos
 
-Se permite utilizar fracciones en las expresiones matemáticas.
+Se permiten resultados intermedios fraccionarios y números negativos dentro de las expresiones, siempre que el resultado final sea exactamente el objetivo solicitado.
 
-## Números negativos
+## Números de varias cifras
 
-Se permite utilizar números negativos en las expresiones.
-
-## Números de varios dígitos
-
-Se permite formar números utilizando más de un dígito.
+Se permiten expresiones que contengan números de varias cifras, de acuerdo con las operaciones y reglas de formación de números aprobadas para el juego.
 
 ## Operaciones matemáticas
 
-Las operaciones permitidas serán definidas y aprobadas por el equipo.
+Las operaciones matemáticas permitidas serán definidas y aprobadas por el equipo. Las expresiones deben respetar las reglas de sintaxis y prioridad de dichas operaciones.
 
 ## Respuesta correcta
 
-Una respuesta es correcta cuando la expresión utiliza correctamente los números disponibles y produce exactamente el objetivo solicitado.
+Una respuesta es correcta cuando:
+
+- utiliza únicamente los cuatro números generados al inicio;
+- utiliza cada uno de esos números exactamente una vez;
+- respeta las operaciones permitidas;
+- puede incluir resultados intermedios fraccionarios, números negativos y números de varias cifras según estas reglas; y
+- produce exactamente el objetivo solicitado.
 
 ## Objetivo completado
 
-Un objetivo se considera completado cuando el jugador proporciona una expresión válida que produce exactamente dicho objetivo.
+Un objetivo se considera completado cuando el jugador proporciona una expresión válida que cumple todas las condiciones anteriores y produce exactamente ese valor.
 
 ## Finalizacion de la partida
 

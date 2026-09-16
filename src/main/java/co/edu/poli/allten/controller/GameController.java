@@ -1,6 +1,7 @@
 package co.edu.poli.allten.controller;
 
 import co.edu.poli.allten.model.GameModel;
+import co.edu.poli.allten.model.ExpressionValidationResult;
 import co.edu.poli.allten.view.GameView;
 import javafx.scene.Scene;
 
@@ -20,13 +21,41 @@ public class GameController {
     }
 
     private void startGame() {
-        if (view.getNickname().isEmpty()) {
+        String nickname = view.getNickname();
+
+        if (nickname == null || nickname.isBlank()) {
             view.showNicknameRequired();
             return;
         }
 
-        model.startGame();
-        view.showGameStarted(view.getNickname());
+        model.startGame(nickname);
+        view.showGameStarted(model.getSession().getPlayer().getNickname(), this::submitAnswer, this::selectTarget);
+        view.showRound(model.getCurrentRound());
+    }
+
+    private void selectTarget(int targetNumber) {
+        if (model.selectTarget(targetNumber)) {
+            view.showRound(model.getCurrentRound());
+        }
+    }
+
+    private void submitAnswer(String answer) {
+        if (answer == null || answer.isBlank()) {
+            view.showAnswerRequired();
+            return;
+        }
+
+        ExpressionValidationResult result = model.processAnswer(answer);
+        if (result == ExpressionValidationResult.VALID) {
+            view.markRoundCompleted(model.getLastSolvedTarget(), answer);
+            if (model.isGameStarted()) {
+                view.showRound(model.getCurrentRound());
+            } else {
+                view.showGameSummary(model.getSession().getTotalTime(), model.getRanking().getPlayers());
+            }
+        } else {
+            view.showValidationError(result, model.getLastCalculatedResult());
+        }
     }
 
     public GameModel getModel() {

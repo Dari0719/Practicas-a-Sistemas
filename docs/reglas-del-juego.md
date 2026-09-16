@@ -2,56 +2,97 @@
 
 ## Inicio de la partida
 
-Al iniciar una partida, el sistema genera cuatro números. Esos cuatro números permanecen disponibles durante toda la partida y deben utilizarse para resolver todos los objetivos.
+El jugador escribe un nickname y comienza la partida con el botón **Iniciar Partida** o presionando **Enter**.
+
+Al comenzar, el sistema genera cuatro números enteros aleatorios entre 1 y 9. Los números pueden repetirse. El mismo conjunto de cuatro números se mantiene durante toda la partida.
+
+## Garantía de solubilidad
+
+El sistema no acepta cualquier combinación aleatoria. Antes de iniciar la partida, aplica una búsqueda exhaustiva por fuerza bruta sobre las operaciones y agrupaciones posibles.
+
+La combinación solo se utiliza si permite obtener todos los objetivos del 1 al 10. Si una combinación no permite resolver los diez objetivos, se descarta y se genera otra.
+
+Por lo tanto, toda partida iniciada debe tener solución para los diez objetivos.
 
 ## Objetivos
 
-El jugador debe encontrar, de forma independiente, una expresión matemática válida para cada uno de los valores enteros del 1 al 10. Cada expresión debe producir exactamente el objetivo que se está resolviendo.
+La partida contiene diez objetivos: los números enteros del 1 al 10.
+
+Los objetivos pueden resolverse en cualquier orden. El jugador puede comenzar por el 1, el 7, el 10 o cualquier otro objetivo pendiente. No existe una secuencia obligatoria.
+
+Una expresión correcta se asigna automáticamente al objetivo cuyo resultado produce. No es obligatorio seleccionar primero la fila del objetivo.
 
 ## Uso de los números
 
-En cada solución deben utilizarse los cuatro números generados por el sistema, y cada uno debe utilizarse exactamente una vez. Esta condición se aplica por separado a cada objetivo: no se comparten ni se consumen números entre soluciones.
+Cada expresión debe utilizar los cuatro números generados para la partida, exactamente una vez cada uno.
 
-## Fracciones y números negativos
+Los números no se consumen entre objetivos. El mismo conjunto de cuatro números puede reutilizarse para resolver los diez objetivos.
 
-Se permiten resultados intermedios fraccionarios y números negativos dentro de las expresiones, siempre que el resultado final sea exactamente el objetivo solicitado.
+Los botones de números se deshabilitan individualmente cuando el número correspondiente ya fue usado en la expresión actual. Si existen números repetidos, se pueden utilizar tantas copias como hayan sido generadas. Al borrar o reiniciar la expresión, los botones vuelven a habilitarse.
 
-## Números de varias cifras
+## Operaciones permitidas
 
-Se permiten expresiones que contengan números de varias cifras, de acuerdo con las operaciones y reglas de formación de números aprobadas para el juego.
+Se permiten:
 
-## Operaciones matemáticas
+- suma (`+`);
+- resta (`-` o `−`);
+- multiplicación (`*` o `×`);
+- división (`/` o `÷`);
+- paréntesis.
 
-Las operaciones matemáticas permitidas serán definidas y aprobadas por el equipo. Las expresiones deben respetar las reglas de sintaxis y prioridad de dichas operaciones.
+El teclado del juego muestra los operadores con sus símbolos visuales. Si el jugador escribe `*` o `/` en el teclado, la aplicación los muestra como `×` y `÷`.
 
-## Respuesta correcta
+La expresión se puede confirmar presionando el botón `=` o la tecla **Enter**.
 
-Una respuesta es correcta cuando:
+## Resultados intermedios
 
-- utiliza únicamente los cuatro números generados al inicio;
-- utiliza cada uno de esos números exactamente una vez;
-- respeta las operaciones permitidas;
-- puede incluir resultados intermedios fraccionarios, números negativos y números de varias cifras según estas reglas; y
-- produce exactamente el objetivo solicitado.
+Se permiten resultados intermedios fraccionarios y negativos, siempre que el resultado final sea exactamente uno de los objetivos del 1 al 10.
 
-## Objetivo completado
+No se permite dividir entre cero ni utilizar operadores o paréntesis con sintaxis inválida.
 
-Un objetivo se considera completado cuando el jugador proporciona una expresión válida que cumple todas las condiciones anteriores y produce exactamente ese valor.
+## Validación de respuestas
 
-## Finalizacion de la partida
+Una expresión es correcta cuando:
 
-La partida comienza cuando el jugador inicia el reto y termina cuando completa correctamente los diez objetivos, del 1 al 10.
+- utiliza únicamente los cuatro números generados;
+- usa cada número exactamente una vez;
+- utiliza solo operaciones permitidas;
+- tiene una sintaxis matemática válida;
+- no divide entre cero; y
+- produce exactamente uno de los objetivos pendientes.
 
-Al finalizar, la aplicacion mostrara un recuadro con el tiempo total empleado por el jugador.
+Si la expresión utiliza números incorrectos o repite una copia que ya no está disponible, se muestra un mensaje indicando que deben usarse los cuatro números disponibles exactamente una vez.
 
-## Criterio de victoria
+Si la expresión tiene una operación o estructura inválida, se muestra un mensaje de operación matemática no válida.
 
-El resultado principal de la partida sera el tiempo. En una tabla de clasificacion, el mejor resultado de cada jugador sera su menor tiempo registrado en una partida completada.
+Si la expresión es válida, pero produce un resultado que no corresponde a una solución pendiente, se muestra el resultado obtenido. Por ejemplo: **El resultado 12 no hace parte de las soluciones.**
 
-Si dos jugadores tienen el mismo tiempo, se desempata usando el menor numero de intentos. Si el empate continua, se conserva el primer resultado registrado.
+## Progreso y finalización
 
-Las partidas abandonadas o incompletas no se tendran en cuenta para la tabla de mejores tiempos.
+Cada objetivo resuelto se marca visualmente en verde y conserva la expresión utilizada. El orden visual de las soluciones representa el orden en que el jugador las completó.
 
-## Aprobación
+La partida termina cuando los diez objetivos están resueltos, sin importar el orden.
 
-Las reglas fueron revisadas y aprobadas por los integrantes del equipo.
+Al finalizar, se muestra una pantalla de resumen dentro de la aplicación con el tiempo total empleado.
+
+## Tiempo y ranking
+
+El cronómetro comienza al iniciar la partida y se detiene al resolver el décimo objetivo.
+
+El ranking se ordena por el menor tiempo total. Si dos jugadores tienen el mismo tiempo, se desempata con el menor número de intentos. Las partidas abandonadas o incompletas no se incluyen.
+
+Desde el resumen de la partida, el jugador puede consultar el ranking o volver a la pantalla de inicio.
+
+## Arquitectura y recursos
+
+La aplicación sigue el patrón MVC:
+
+- el modelo administra las reglas, la sesión, los objetivos, la validación, el tiempo y el ranking;
+- el controlador conecta las acciones de la vista con el modelo;
+- la vista carga FXML, aplica CSS y muestra el estado al jugador.
+
+Las pantallas están separadas en recursos:
+
+- `game-home.fxml` y `game-home.css` para el inicio;
+- `game.fxml` y `game.css` para la partida;
+- `game-summary.fxml` para el resumen final.

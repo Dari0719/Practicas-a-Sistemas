@@ -80,6 +80,51 @@ public class GameControllerTest {
         });
     }
 
+    @Test
+    public void modelStartsSessionWithNickname() {
+        GameModel model = new GameModel();
+
+        model.startGame("Jugador1");
+
+        assertTrue(model.isGameStarted());
+        assertTrue(model.getSession() != null);
+        assertEquals("Jugador1", model.getSession().getPlayer().getNickname());
+        assertEquals(10, model.getSession().getRounds().size());
+    }
+
+    @Test
+    public void keypadButtonUpdatesExpressionField() throws Exception {
+        runOnJavaFxThread(() -> {
+            GameModel model = new GameModel();
+            GameView view = new GameView();
+            new GameController(model, view);
+
+            TextField nicknameField = (TextField) view.createScene().lookup("#nickname-field");
+            Button startButton = (Button) view.createScene().lookup("#start-button");
+            nicknameField.setText("Jugador1");
+            startButton.fire();
+
+            Button numberButton = (Button) view.createScene().lookup(".number-key");
+            TextField answerField = (TextField) view.createScene().lookup("#answer-field");
+            String visibleNumber = numberButton.getText();
+            numberButton.fire();
+
+            assertEquals(visibleNumber, answerField.getText());
+        });
+    }
+
+    @Test
+    public void playerCanSelectObjectiveNineBeforeObjectiveOne() {
+        GameModel model = new GameModel();
+        model.startGame("Jugador1");
+
+        assertTrue(model.selectTarget(9));
+        assertEquals(9, model.getCurrentRound().getRoundNumber());
+
+        assertTrue(model.selectTarget(1));
+        assertEquals(1, model.getCurrentRound().getRoundNumber());
+    }
+
     private static void runOnJavaFxThread(ThrowingRunnable action) throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Throwable> failure = new AtomicReference<>();

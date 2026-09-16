@@ -1,0 +1,50 @@
+.root {
+    -fx-background-color: #e9e8e6;
+}
+
+#title-label {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111111;
+}
+
+#nickname-label {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+#nickname-field {
+    -fx-background-color: white;
+    -fx-border-color: #111111;
+    -fx-border-radius: 22px;
+    -fx-background-radius: 22px;
+    -fx-padding: 0 14px;
+    -fx-font-size: 11px;
+}
+
+#start-button {
+    -fx-background-color: #111111;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 22px;
+    -fx-border-radius: 22px;
+}
+
+#status-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: #b3261e;
+}
+
+#footer-title {
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #555555;
+}
+
+#footer-description {
+    -fx-font-size: 8px;
+    -fx-text-fill: #777777;
+}
+

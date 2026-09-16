@@ -1,171 +1,339 @@
 package co.edu.poli.allten.view;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+import co.edu.poli.allten.model.ExpressionValidationResult;
+import co.edu.poli.allten.model.Player;
+import co.edu.poli.allten.model.Round;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.geometry.Pos;
-import javafx.geometry.Insets;
+import javafx.scene.layout.Priority;
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
 
 public class GameView {
-	private final Label statusLabel = new Label();
-	private final Button startButton = new Button("Iniciar Partida");
-	private final TextField nicknameField = new TextField();
-	private final BorderPane homeLayout = new BorderPane();
-	private final Scene scene;
+    private final Label statusLabel;
+    private final Button startButton;
+    private final TextField nicknameField;
+    private final BorderPane homeLayout;
+    private final Scene scene;
+    private BorderPane gameLayout;
+    private Label operationLabel;
+    private GridPane objectivesGrid;
+    private TextField answerField;
+    private Label gameStatusLabel;
+    private final List<HBox> objectiveRows = new ArrayList<>();
+    private final List<Label> objectiveExpressions = new ArrayList<>();
+    private final List<Button> numberKeys = new ArrayList<>();
 
-	public GameView() {
-		Label titleLabel = new Label("Allten");
-		titleLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #111111;");
+    public GameView() {
+        homeLayout = loadLayout("game-home.fxml", "No se pudo cargar la vista principal de JavaFX.");
 
-		HBox titleBox = new HBox(titleLabel);
-		titleBox.setAlignment(Pos.CENTER);
-		titleBox.setPadding(new Insets(42, 0, 0, 0));
+        statusLabel = find(homeLayout, "status-label", Label.class);
+        startButton = find(homeLayout, "start-button", Button.class);
+        nicknameField = find(homeLayout, "nickname-field", TextField.class);
 
-		Label nicknameLabel = new Label("NICKNAME");
-		nicknameLabel.setStyle("-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+        statusLabel.setVisible(false);
+        statusLabel.setManaged(false);
 
-		nicknameField.setId("nickname-field");
-		nicknameField.setPrefHeight(38);
-		nicknameField.setPromptText("Númeromaster");
-		nicknameField.setStyle("-fx-background-color: white; -fx-border-color: #111111;"
-				+ "-fx-border-radius: 22px; -fx-background-radius: 22px;"
-				+ "-fx-padding: 0 14px; -fx-font-size: 11px;");
+        scene = new Scene(homeLayout, 800, 700);
+        addStylesheet("game-home.css");
+    }
 
-		startButton.setMaxWidth(Double.MAX_VALUE);
-		startButton.setId("start-button");
-		startButton.setPrefHeight(36);
-		startButton.setStyle("-fx-background-color: #111111; -fx-text-fill: white;"
-				+ "-fx-font-size: 11px; -fx-font-weight: bold;"
-				+ "-fx-background-radius: 22px; -fx-border-radius: 22px;");
+    public Scene createScene() {
+        return scene;
+    }
 
-		statusLabel.setVisible(false);
-		statusLabel.setManaged(false);
-		statusLabel.setId("status-label");
-		statusLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #b3261e;");
+    public void setOnStartGame(Runnable action) {
+        startButton.setOnAction(event -> action.run());
+        nicknameField.setOnAction(event -> action.run());
+    }
 
-		VBox form = new VBox(8, nicknameLabel, nicknameField, statusLabel, startButton);
-		form.setMaxWidth(430);
+    public String getNickname() {
+        return nicknameField.getText().trim();
+    }
 
-		Label footerTitle = new Label("Reto diario · 09 SEP 2026");
-		footerTitle.setStyle("-fx-font-size: 8px; -fx-font-weight: bold; -fx-text-fill: #555555;");
-		Label footerDescription = new Label("Números al azar · 10 operaciones");
-		footerDescription.setStyle("-fx-font-size: 8px; -fx-text-fill: #777777;");
-		VBox footer = new VBox(1, footerTitle, footerDescription);
-		footer.setAlignment(Pos.CENTER);
-		footer.setPadding(new Insets(0, 0, 44, 0));
+    public void showNicknameRequired() {
+        statusLabel.setText("Debes escribir un nickname para continuar.");
+        statusLabel.setVisible(true);
+        statusLabel.setManaged(true);
+        nicknameField.requestFocus();
+    }
 
-		homeLayout.setTop(titleBox);
-		homeLayout.setCenter(form);
-		homeLayout.setBottom(footer);
-		homeLayout.setStyle("-fx-background-color: #e9e8e6;");
-		BorderPane.setAlignment(form, Pos.CENTER);
-		scene = new Scene(homeLayout, 800, 500);
-	}
+    public void showGameStarted(String nickname, Consumer<String> answerAction,
+            Consumer<Integer> targetAction) {
+            gameLayout = loadLayout("game.fxml", "No se pudo cargar la vista del juego de JavaFX.");
 
-	public Scene createScene() {
-		return scene;
-	}
+            addStylesheet("game.css");
+            bindGameControls(nickname, answerAction);
+        createObjectiveRows(targetAction);
+        scene.setRoot(gameLayout);
+    }
 
-	public void setOnStartGame(Runnable action) {
-		startButton.setOnAction(event -> action.run());
-	}
+    public void showGameStarted(String nickname) {
+        showGameStarted(nickname, answer -> { }, target -> { });
+    }
 
-	public String getNickname() {
-		return nicknameField.getText().trim();
-	}
+    public void showGameStarted(String nickname, Consumer<String> answerAction) {
+        showGameStarted(nickname, answerAction, target -> { });
+    }
 
-	public void showNicknameRequired() {
-		statusLabel.setText("Debes escribir un nickname para continuar.");
-		statusLabel.setVisible(true);
-		statusLabel.setManaged(true);
-		nicknameField.requestFocus();
-	}
+    public void showRound(Round round) {
+        if (round == null) {
+            return;
+        }
 
-	public void showGameStarted(String nickname) {
-		Button backButton = new Button("Volver");
-		backButton.setId("back-button");
-		backButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #333333;"
-				+ "-fx-font-size: 11px; -fx-font-weight: bold;");
-		backButton.setOnAction(event -> {
-			statusLabel.setVisible(false);
-			statusLabel.setManaged(false);
-			scene.setRoot(homeLayout);
-		});
+        operationLabel.setText("OBJETIVO " + round.getRoundNumber() + "/10");
+        for (int index = 0; index < numberKeys.size()
+            && index < round.getChallenge().getAvailableNumbers().size(); index++) {
+            numberKeys.get(index).setText(String.valueOf(
+                round.getChallenge().getAvailableNumbers().get(index)));
+        }
+        objectiveRows.forEach(row -> row.getStyleClass().remove("active"));
+        objectiveRows.get(round.getRoundNumber() - 1).getStyleClass().add("active");
+        answerField.clear();
+        updateNumberKeyState();
+        gameStatusLabel.setText("");
+        answerField.requestFocus();
+    }
 
-		Label gameTitle = new Label("Allten");
-		gameTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #222222;");
-		Label playerLabel = new Label("Jugador: " + nickname);
-		playerLabel.setId("player-label");
-		playerLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #666666;");
-		VBox titleContent = new VBox(2, gameTitle, playerLabel);
-		titleContent.setAlignment(Pos.CENTER);
-		Label scoreLabel = new Label("0 pts");
-		scoreLabel.setStyle("-fx-background-color: #f6d319; -fx-background-radius: 12px;"
-				+ "-fx-padding: 4px 10px; -fx-font-size: 10px; -fx-font-weight: bold;");
+    public void markRoundCompleted(int roundNumber, String expression) {
+        int index = roundNumber - 1;
+        if (index < 0 || index >= objectiveRows.size()) {
+            return;
+        }
 
-		BorderPane header = new BorderPane();
-		header.setLeft(backButton);
-		header.setCenter(titleContent);
-		header.setRight(scoreLabel);
-		header.setPadding(new Insets(8, 18, 8, 22));
-		header.setStyle("-fx-background-color: white; -fx-border-color: #dddddd; -fx-border-width: 0 0 1 0;");
+        objectiveRows.get(index).getStyleClass().remove("active");
+        objectiveRows.get(index).getStyleClass().add("completed");
+        objectiveExpressions.get(index).setText(expression);
+    }
 
-		Label operationLabel = new Label("OPERACIÓN 1/10");
-		operationLabel.setStyle("-fx-background-color: #dcefd7; -fx-background-radius: 12px;"
-				+ "-fx-padding: 5px 10px; -fx-font-size: 9px; -fx-font-weight: bold;");
-		Label numbersLabel = new Label("TUS 4 NÚMEROS");
-		numbersLabel.setStyle("-fx-font-size: 9px; -fx-text-fill: #777777;");
-		HBox numbers = new HBox(8,
-				createNumberLabel("3", "#f6d319"),
-				createNumberLabel("7", "#a9d1e8"),
-				createNumberLabel("2", "#78b477"),
-				createNumberLabel("9", "white"));
-		numbers.setAlignment(Pos.CENTER);
-		Label resolveLabel = new Label("RESUELVE");
-		resolveLabel.setStyle("-fx-font-size: 9px; -fx-text-fill: #777777;");
-		Label questionLabel = new Label("12 + 7 = ?");
-		questionLabel.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #111111;");
-		VBox gameCard = new VBox(12, numbersLabel, numbers, resolveLabel, questionLabel);
-		gameCard.setAlignment(Pos.CENTER);
-		gameCard.setPadding(new Insets(18));
-		gameCard.setStyle("-fx-background-color: white; -fx-border-color: #333333;"
-				+ "-fx-border-radius: 8px; -fx-background-radius: 8px;");
-		gameCard.setMaxWidth(680);
+    public void showAnswerRequired() {
+        gameStatusLabel.setText("Escribe una respuesta para continuar.");
+        answerField.requestFocus();
+    }
 
-		TextField answerField = new TextField();
-		answerField.setPromptText("Tu respuesta");
-		answerField.setPrefHeight(38);
-		answerField.setStyle("-fx-background-color: white; -fx-border-color: #333333;"
-				+ "-fx-border-radius: 22px; -fx-background-radius: 22px; -fx-padding: 0 14px;");
-		Button checkButton = new Button("Comprobar respuesta");
-		checkButton.setMaxWidth(Double.MAX_VALUE);
-		checkButton.setPrefHeight(36);
-		checkButton.setStyle("-fx-background-color: #111111; -fx-text-fill: white;"
-				+ "-fx-font-weight: bold; -fx-background-radius: 22px;");
-		VBox answerBox = new VBox(8, new Label("TU RESPUESTA"), answerField, checkButton);
-		answerBox.setMaxWidth(680);
+    public void showGameCompleted(long elapsedTimeMillis) {
+        showGameSummary(elapsedTimeMillis, List.of());
+    }
 
-		VBox gameContent = new VBox(18, operationLabel, gameCard, answerBox);
-		gameContent.setAlignment(Pos.TOP_CENTER);
-		gameContent.setPadding(new Insets(28, 20, 20, 20));
-		gameContent.setStyle("-fx-background-color: #e9e8e6;");
+    public void showGameSummary(long elapsedTimeMillis, List<Player> players) {
+        BorderPane summaryLayout = loadLayout("game-summary.fxml", "No se pudo cargar el resumen de la partida.");
 
-		BorderPane gameLayout = new BorderPane(gameContent);
-		gameLayout.setTop(header);
-		gameLayout.setStyle("-fx-background-color: #e9e8e6;");
-		scene.setRoot(gameLayout);
-	}
+        Label timeLabel = find(summaryLayout, "summary-time-label", Label.class);
+        Label rankingLabel = find(summaryLayout, "summary-ranking-label", Label.class);
+        Button rankingButton = find(summaryLayout, "ranking-button", Button.class);
+        Button homeButton = find(summaryLayout, "home-button", Button.class);
+        timeLabel.setText("Tiempo total: " + formatTime(elapsedTimeMillis));
+        rankingButton.setOnAction(event -> {
+            rankingLabel.setText(formatRanking(players));
+            rankingLabel.setVisible(true);
+            rankingLabel.setManaged(true);
+        });
+        homeButton.setOnAction(event -> scene.setRoot(homeLayout));
+        scene.setRoot(summaryLayout);
+    }
 
-	private Label createNumberLabel(String value, String color) {
-		Label numberLabel = new Label(value);
-		numberLabel.setAlignment(Pos.CENTER);
-		numberLabel.setPrefSize(42, 42);
-		numberLabel.setStyle("-fx-background-color: " + color + "; -fx-border-color: #333333;"
-				+ "-fx-border-radius: 3px; -fx-background-radius: 3px; -fx-font-size: 16px;");
-		return numberLabel;
-	}
+    public void showValidationError(ExpressionValidationResult result, Double calculatedResult) {
+        String message;
+        switch (result) {
+            case INVALID_NUMBERS:
+                message = "Usa los cuatro números disponibles exactamente una vez.";
+                break;
+            case INVALID_OPERATION:
+                message = "Operación matemática no válida. Revisa operadores y paréntesis.";
+                break;
+            case WRONG_TARGET:
+                String resultText = calculatedResult == null ? "ese resultado" : formatResult(calculatedResult);
+                message = "El resultado " + resultText + " no hace parte de las soluciones.";
+                break;
+            default:
+                message = "La expresión no es válida.";
+                break;
+        }
+        gameStatusLabel.setText(message);
+        answerField.requestFocus();
+    }
+
+    private void createObjectiveRows(Consumer<Integer> targetAction) {
+        objectiveRows.clear();
+        objectiveExpressions.clear();
+        objectivesGrid.getChildren().clear();
+
+        for (int index = 0; index < 10; index++) {
+            final int targetNumber = index + 1;
+            Label expression = new Label();
+            expression.getStyleClass().add("objective-expression");
+            expression.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(expression, Priority.ALWAYS);
+
+            Label number = new Label(String.valueOf(targetNumber));
+            number.getStyleClass().add("objective-number");
+            HBox row = new HBox(expression, number);
+            row.getStyleClass().add("objective-row");
+            row.setAlignment(Pos.CENTER_RIGHT);
+            row.setPrefHeight(32);
+            row.setPrefWidth(278);
+            row.setOnMouseClicked(event -> targetAction.accept(targetNumber));
+
+            objectiveRows.add(row);
+            objectiveExpressions.add(expression);
+            objectivesGrid.add(row, index < 5 ? 0 : 1, index % 5);
+        }
+    }
+
+    private void bindGameControls(String nickname, Consumer<String> answerAction) {
+        Button backButton = find(gameLayout, "back-button", Button.class);
+        Label playerLabel = find(gameLayout, "player-label", Label.class);
+        operationLabel = find(gameLayout, "operation-label", Label.class);
+        objectivesGrid = find(gameLayout, "objectives-grid", GridPane.class);
+        answerField = find(gameLayout, "answer-field", TextField.class);
+        Button checkButton = find(gameLayout, "check-button", Button.class);
+        Button clearButton = find(gameLayout, "clear-button", Button.class);
+        Button resetButton = find(gameLayout, "reset-expression-button", Button.class);
+        gameStatusLabel = find(gameLayout, "game-status-label", Label.class);
+
+        playerLabel.setText("Jugador: " + nickname);
+        numberKeys.clear();
+        gameLayout.lookupAll(".number-key").forEach(node -> numberKeys.add((Button) node));
+
+        backButton.setOnAction(event -> scene.setRoot(homeLayout));
+        checkButton.setOnAction(event -> answerAction.accept(answerField.getText().trim()));
+        answerField.setOnAction(event -> answerAction.accept(answerField.getText().trim()));
+        answerField.addEventHandler(KeyEvent.KEY_TYPED, this::normalizeKeyboardOperator);
+        answerField.textProperty().addListener((observable, oldValue, newValue) -> updateNumberKeyState());
+        clearButton.setOnAction(event -> removeLastCharacter());
+        resetButton.setOnAction(event -> answerField.clear());
+        bindKeyButtons(".number-key");
+        bindKeyButtons(".operator-key");
+    }
+
+    private void removeLastCharacter() {
+        String expression = answerField.getText();
+        if (!expression.isEmpty()) {
+            answerField.deleteText(expression.length() - 1, expression.length());
+        }
+    }
+
+    private String formatTime(long elapsedTimeMillis) {
+        long totalSeconds = elapsedTimeMillis / 1000;
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
+        long milliseconds = elapsedTimeMillis % 1000;
+        return String.format("%02d:%02d.%03d", minutes, seconds, milliseconds);
+    }
+
+    private String formatResult(double result) {
+        if (result == Math.rint(result)) {
+            return String.valueOf((long) result);
+        }
+        return String.valueOf(result);
+    }
+
+    private String formatRanking(List<Player> players) {
+        if (players.isEmpty()) {
+            return "Aún no hay resultados en el ranking.";
+        }
+
+        StringBuilder ranking = new StringBuilder("RANKING\n");
+        for (int index = 0; index < players.size(); index++) {
+            Player player = players.get(index);
+            ranking.append(index + 1).append(". ")
+                    .append(player.getNickname()).append(" - ")
+                    .append(formatTime(player.getBestTime())).append("\n");
+        }
+        return ranking.toString();
+    }
+
+    private void bindKeyButtons(String selector) {
+        gameLayout.lookupAll(selector).forEach(node -> {
+            Button button = (Button) node;
+            button.setOnAction(event -> answerField.appendText(button.getText()));
+        });
+    }
+
+    private void updateNumberKeyState() {
+        String expression = answerField.getText();
+        List<String> seenKeys = new ArrayList<>();
+        for (Button numberKey : numberKeys) {
+            String value = numberKey.getText();
+            int sameKeyIndex = 0;
+            for (String seenKey : seenKeys) {
+                if (seenKey.equals(value)) {
+                    sameKeyIndex++;
+                }
+            }
+            seenKeys.add(value);
+
+            int occurrences = 0;
+            for (int index = 0; index < expression.length(); index++) {
+                if (expression.substring(index, index + 1).equals(value)) {
+                    occurrences++;
+                }
+            }
+            boolean shouldDisable = occurrences > sameKeyIndex;
+            boolean wasEnabled = !numberKey.isDisabled();
+            numberKey.setDisable(shouldDisable);
+            if (shouldDisable && wasEnabled) {
+                animateUsedNumber(numberKey);
+            }
+        }
+    }
+
+    private void animateUsedNumber(Button numberKey) {
+        FadeTransition transition = new FadeTransition(Duration.millis(180), numberKey);
+        transition.setFromValue(0.45);
+        transition.setToValue(1.0);
+        transition.play();
+    }
+
+    private void normalizeKeyboardOperator(KeyEvent event) {
+        String character = event.getCharacter();
+        if (!"*".equals(character) && !"/".equals(character)) {
+            return;
+        }
+
+        event.consume();
+        String visibleOperator = "*".equals(character) ? "×" : "÷";
+        answerField.insertText(answerField.getCaretPosition(), visibleOperator);
+    }
+
+    private BorderPane loadLayout(String resourceName, String errorMessage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/co/edu/poli/allten/views/" + resourceName));
+            return loader.load();
+        } catch (IOException e) {
+            throw new IllegalStateException(errorMessage, e);
+        }
+    }
+
+    private void addStylesheet(String stylesheetName) {
+        String stylesheet = getClass()
+                .getResource("/co/edu/poli/allten/styles/" + stylesheetName)
+                .toExternalForm();
+        if (!scene.getStylesheets().contains(stylesheet)) {
+            scene.getStylesheets().add(stylesheet);
+        }
+    }
+
+    private <T extends Node> T find(Node root, String id, Class<T> type) {
+        Node node = root.lookup("#" + id);
+        if (!type.isInstance(node)) {
+            throw new IllegalStateException("La vista no contiene el nodo esperado: #" + id);
+        }
+        return type.cast(node);
+    }
 }

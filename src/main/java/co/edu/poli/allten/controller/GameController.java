@@ -20,8 +20,13 @@ public class GameController {
     }
 
     private void startGame() {
+        if (view.getNickname().isEmpty()) {
+            view.showNicknameRequired();
+            return;
+        }
+
         model.startGame();
-        view.showGameStarted();
+        view.showGameStarted(view.getNickname());
     }
 
     public GameModel getModel() {

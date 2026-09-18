@@ -3,11 +3,12 @@
 ## Números disponibles
 
 Cada reto proporciona cuatro números.
-image.png
+![Números disponibles del reto](image.png)
 
 ## Objetivos
 
 El jugador debe conseguir los resultados correspondientes a los objetivos del 1 al 10.
+![Objetivos del reto](image-1.png)
 
 ## Uso de los números
 
@@ -28,6 +29,7 @@ Se permite formar números utilizando más de un dígito.
 ## Operaciones matemáticas
 
 Las operaciones permitidas serán definidas y aprobadas por el equipo.
+![Expresiones Matematicas](image-2.png)
 
 ## Respuesta correcta
 

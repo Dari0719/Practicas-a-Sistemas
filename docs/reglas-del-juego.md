@@ -13,6 +13,7 @@ El jugador debe conseguir los resultados correspondientes a los objetivos del 1 
 ## Uso de los números
 
 Los cuatro números disponibles deben utilizarse exactamente una vez para construir cada solución.
+![Uso de los numeros](image-3.png)
 
 ## Fracciones
 

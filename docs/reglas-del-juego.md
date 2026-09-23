@@ -29,7 +29,7 @@ Se permite utilizar números negativos en las expresiones.
 
 Se permite formar números utilizando más de un dígito.
 ![Numeros Varios Digitos](image-7.png)
-
+    
 ## Operaciones matemáticas
 
 Las operaciones permitidas serán definidas y aprobadas por el equipo.

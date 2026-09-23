@@ -18,14 +18,17 @@ Los cuatro números disponibles deben utilizarse exactamente una vez para constr
 ## Fracciones
 
 Se permite utilizar fracciones en las expresiones matemáticas.
+![Uso de Fracciones](image-5.png)
 
 ## Números negativos
 
 Se permite utilizar números negativos en las expresiones.
+![Numeros negativos](image-6.png)
 
 ## Números de varios dígitos
 
 Se permite formar números utilizando más de un dígito.
+![Numeros Varios Digitos](image-7.png)
 
 ## Operaciones matemáticas
 
@@ -34,7 +37,8 @@ Las operaciones permitidas serán definidas y aprobadas por el equipo.
 
 ## Respuesta correcta
 
-Una respuesta es correcta cuando la expresión utiliza correctamente los números disponibles y produce exactamente el objetivo solicitado.
+Una respuesta es correcta cuando la expresión utiliza correctamente los números disponibles y produce exactamente el objetivo solicitado. 
+![Respuesta correcta de un numero](image-4.png)
 
 ## Objetivo completado
 

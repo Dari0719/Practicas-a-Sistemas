@@ -1,60 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="co.edu.poli.allten.RetoController"
-      styleClass="pantalla"
-      spacing="10"
-      prefWidth="480" prefHeight="720">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="co.edu.poli.allten.controller.GameController"
+            styleClass="root">
 
-    <padding>
-        <Insets top="24" right="20" bottom="24" left="20"/>
-    </padding>
+    <center>
+        <VBox spacing="10" alignment="CENTER">
 
-    <Label text="Cuatro números, diez objetivos" styleClass="titulo" wrapText="true"/>
-    <Label text="Combina los cuatro números, usando cada uno una sola vez, para llegar a cada objetivo del 1 al 10."
-           styleClass="intro" wrapText="true"/>
+            <TextField fx:id="expressionField"
+                       editable="false"
+                       prefWidth="260"/>
 
-    <!-- Números disponibles -->
-    <Label text="Números disponibles" styleClass="subtitulo"/>
-    <HBox fx:id="fichasBox" spacing="10" styleClass="fichas-box">
-        <!-- Las fichas (Button) se generan por código: ficha1, ficha2, ficha3, ficha4 -->
-    </HBox>
+            <HBox spacing="10">
+                <Button text="🔖"/>
+                <Button text="?"/>
+                <Button text="⚙"/>
+            </HBox>
 
-    <!-- Operaciones -->
-    <HBox spacing="10" alignment="CENTER" styleClass="operaciones-box">
-        <Button fx:id="btnSuma" text="+" styleClass="op-boton" onAction="#onOperacion" userData="+"/>
-        <Button fx:id="btnResta" text="−" styleClass="op-boton" onAction="#onOperacion" userData="-"/>
-        <Button fx:id="btnMultiplica" text="×" styleClass="op-boton" onAction="#onOperacion" userData="*"/>
-        <Button fx:id="btnDivide" text="÷" styleClass="op-boton" onAction="#onOperacion" userData="/"/>
-    </HBox>
+            <!-- Números del juego -->
+            <GridPane hgap="5" vgap="5">
 
-    <Label fx:id="estadoLabel" text="Elige un número para empezar." styleClass="estado" wrapText="true"/>
+                <Button text="1" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Button text="2" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-    <HBox spacing="10" styleClass="acciones-box">
-        <Button fx:id="btnDeshacer" text="Deshacer" styleClass="boton-secundario" onAction="#onDeshacer" disable="true"/>
-        <Button fx:id="btnReiniciar" text="Reiniciar números" styleClass="boton-secundario" onAction="#onReiniciar"/>
-        <Button fx:id="btnNuevoReto" text="Nuevo reto" styleClass="boton-secundario" onAction="#onNuevoReto"/>
-    </HBox>
+                <Button text="3" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Button text="4" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-    <!-- Objetivos -->
-    <Label text="Objetivos" styleClass="subtitulo"/>
-    <Label fx:id="progresoLabel" text="0 de 10 objetivos conseguidos" styleClass="progreso"/>
+                <Button text="5" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Button text="6" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-    <GridPane fx:id="objetivosGrid" hgap="10" vgap="10" styleClass="objetivos-grid">
-        <columnConstraints>
-            <ColumnConstraints percentWidth="50"/>
-            <ColumnConstraints percentWidth="50"/>
-        </columnConstraints>
-        <!-- Las 10 celdas de objetivo (Label o Button) se generan por código -->
-    </GridPane>
+                <Button text="7" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Button text="8" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-</VBox>
+                <Button text="9" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <Button text="10" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            </GridPane>
+
+            <!-- Operadores -->
+            <GridPane hgap="3" vgap="3">
+
+                <Button text="(" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Button text=")" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Button text="×" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                <Button text="/" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                <Button text="^" GridPane.rowIndex="0" GridPane.columnIndex="4"/>
+                <Button text="+" GridPane.rowIndex="0" GridPane.columnIndex="5"/>
+
+                <Button text="1" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                <Button text="2" GridPane.rowIndex="1" GridPane.columnIndex="2" GridPane.columnSpan="2"/>
+                <Button text="3" GridPane.rowIndex="1" GridPane.columnIndex="4"/>
+
+                <Button text="4" GridPane.rowIndex="1" GridPane.columnIndex="5"/>
+
+                <Button text="C" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                <Button text="=" GridPane.rowIndex="2" GridPane.columnIndex="2" GridPane.columnSpan="2"/>
+                <Button text="←" GridPane.rowIndex="2" GridPane.columnIndex="4" GridPane.columnSpan="2"/>
+
+            </GridPane>
+
+        </VBox>
+    </center>
+
+</BorderPane>

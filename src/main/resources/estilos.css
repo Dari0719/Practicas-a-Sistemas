@@ -1,0 +1,105 @@
+/* ===== Allten - pantalla de inicio ===== */
+
+.root-inicio {
+    -fx-background-color: linear-gradient(to bottom right, #1B1740, #0F0D24);
+    -fx-font-family: "Segoe UI", "System";
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Tarjeta central */
+.panel {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-radius: 18;
+    -fx-border-color: rgba(255, 255, 255, 0.14);
+    -fx-border-radius: 18;
+    -fx-padding: 32 40 36 40;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.55), 30, 0.2, 0, 10);
+}
+
+/* Título */
+.titulo {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, #7C4DFF, 20, 0.45, 0, 0);
+}
+
+/* Etiquetas */
+.etiqueta {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #B9B4E0;
+}
+
+/* Campo de texto */
+.campo {
+    -fx-background-color: #221E4D;
+    -fx-background-radius: 10;
+    -fx-border-color: #3B3680;
+    -fx-border-radius: 10;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #8A85B8;
+    -fx-font-size: 15px;
+    -fx-padding: 11 14;
+}
+.campo:hover   { -fx-border-color: #5A52B5; }
+.campo:focused {
+    -fx-border-color: #A78BFA;
+    -fx-effect: dropshadow(gaussian, rgba(167, 139, 250, 0.55), 10, 0.3, 0, 0);
+}
+
+/* Modos de juego: tarjetas seleccionables (se oculta el círculo del radio) */
+.modo {
+    -fx-background-color: #221E4D;
+    -fx-background-radius: 10;
+    -fx-border-color: #3B3680;
+    -fx-border-radius: 10;
+    -fx-text-fill: #C9C5EE;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-graphic-text-gap: 0;
+    -fx-padding: 12 0;
+    -fx-cursor: hand;
+}
+.modo > .radio,
+.modo > .radio > .dot {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+.modo-normal:hover   { -fx-border-color: #7C4DFF; }
+.modo-hardcore:hover { -fx-border-color: #FF4D6D; }
+
+.modo-normal:selected {
+    -fx-background-color: #7C4DFF;
+    -fx-border-color: #A78BFA;
+    -fx-text-fill: white;
+}
+.modo-hardcore:selected {
+    -fx-background-color: #E11D48;
+    -fx-border-color: #FF7A93;
+    -fx-text-fill: white;
+}
+.modo:focused { -fx-border-color: white; }
+
+/* Botón principal */
+.boton-primario {
+    -fx-background-color: linear-gradient(to right, #7C4DFF, #5A67F2);
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 50;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(124, 77, 255, 0.55), 16, 0.3, 0, 4);
+}
+.boton-primario:hover   { -fx-background-color: linear-gradient(to right, #8F66FF, #6C78FF); }
+.boton-primario:pressed { -fx-scale-x: 0.98; -fx-scale-y: 0.98; }
+.boton-primario:focused { -fx-border-color: white; -fx-border-radius: 12; -fx-border-width: 2; }
+.boton-primario:disabled {
+    -fx-opacity: 0.45;
+    -fx-effect: null;
+}

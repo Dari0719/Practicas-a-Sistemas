@@ -1,135 +1,134 @@
-# Configuracion inicial de MySQL
+# Configuración de la base de datos MySQL
 
-## Objetivo
+## Esquema
 
-Configurar la conexion inicial del proyecto All Ten con una base de datos relacional MySQL para preparar la persistencia del juego.
+El esquema está definido en `src/main/resources/db/schema.sql` y corresponde
+al diagrama entidad-relación:
 
-## Versiones y datos de conexion
+- `jugador`: identificador y apodo único.
+- `partida`: jugador, tiempo total en milisegundos, intentos, estado, modo y fecha.
+- Cada partida pertenece a un jugador mediante `jugador_id`.
 
-- Motor: MySQL Community Server 8.0.46.
-- Base de datos: `allten`.
-- Servidor: `localhost`.
-- Puerto: `3306`.
-- Usuario local: `root`.
-- Driver JDBC: MySQL Connector/J `9.4.0`.
+> **Importante:** `schema.sql` contiene `DROP DATABASE IF EXISTS allten`. Ejecutarlo
+> elimina permanentemente las tablas y los datos existentes en `allten`. Haz una
+> copia de seguridad antes si necesitas conservarlos. El script no borra otras bases.
 
-La base de datos se creo con:
+## Crear la base desde cero con MySQL Workbench
+
+1. Inicia MySQL Workbench y abre la conexión local al servidor.
+2. Selecciona **File → Open SQL Script…** y abre
+   `src/main/resources/db/schema.sql`.
+3. Antes de ejecutarlo, confirma que quieres reemplazar la base `allten`: el script
+   elimina esa base y todos sus datos, y luego la crea de nuevo. No afecta a otras bases.
+4. Haz clic dentro del editor SQL y pulsa el botón del rayo para ejecutar el script.
+   Acepta la confirmación si Workbench pregunta si debe ejecutar varias sentencias.
+5. En **SCHEMAS**, pulsa actualizar y expande `allten` → **Tables**. Deben aparecer
+   `jugador` y `partida`.
+
+También se puede ejecutar desde PowerShell, con el cliente de MySQL instalado y
+ubicado en la carpeta raíz del proyecto:
+
+```powershell
+Get-Content -Raw .\src\main\resources\db\schema.sql | mysql -u root -p
+```
+
+El cliente solicitará la contraseña de MySQL. El script incluye
+`DROP DATABASE IF EXISTS allten`; ejecútalo solo cuando realmente quieras eliminar
+y recrear esa base.
+
+Comprueba el esquema desde una pestaña de consultas de Workbench:
 
 ```sql
-CREATE DATABASE allten;
 USE allten;
-SELECT DATABASE();
+SHOW TABLES;
+DESCRIBE jugador;
+DESCRIBE partida;
+SHOW CREATE TABLE partida;
 ```
 
-El ultimo comando debe devolver `allten`.
+`partida.jugador_id` debe tener una clave foránea hacia `jugador.id`.
 
-## Dependencia del proyecto
+## Tablas creadas
 
-La dependencia del controlador JDBC se encuentra en `pom.xml`:
+El esquema coincide con el diagrama entidad-relación:
 
-```xml
-<dependency>
-    <groupId>com.mysql</groupId>
-    <artifactId>mysql-connector-j</artifactId>
-    <version>9.4.0</version>
-</dependency>
-```
+- `jugador`: `id` entero autoincremental (clave primaria) y `apodo` único de hasta
+  50 caracteres.
+- `partida`: `id` autoincremental, `jugador_id` (clave foránea), `tiempo_total`
+  en milisegundos, `intentos`, `estado`, `modo` y `fecha`.
+- La tabla `partida` tiene un índice para acelerar consultas del ranking por estado,
+  modo, tiempo e intentos.
 
-## Credenciales
+## Credenciales para Java
 
-Las credenciales no se escriben directamente en el codigo. En PowerShell, desde la carpeta `allten-game`, se configuran como variables de entorno:
+La clase `ConexionBaseDatos` lee las credenciales desde variables de entorno. En
+PowerShell, antes de ejecutar la aplicación o una comprobación de conexión:
 
 ```powershell
 $env:ALLTEN_DB_USER="root"
 $env:ALLTEN_DB_PASSWORD="TU_CONTRASENA"
 ```
 
-Estas variables permanecen disponibles solamente en la ventana actual de PowerShell. No se deben subir contrasenas al repositorio.
+No guardes la contraseña en el código ni en archivos versionados. La URL apunta a
+`jdbc:mysql://localhost:3306/allten`.
 
-## Clase de conexion
+## Uso de los DAO
 
-La clase `DatabaseConnection` centraliza la conexion usando la URL:
+- `JugadorDAO.guardar(jugador)` inserta el jugador o recupera el identificador del
+  apodo existente; actualiza el ID dentro del objeto.
+- `JugadorDAO.buscarPorApodo(apodo)` devuelve el jugador o `null` si no existe.
+- `PartidaDAO.guardar(sesion)` guarda una sesión iniciada. El jugador debe haberse
+  guardado primero para tener una clave foránea válida. Se guarda el estado actual
+  de la sesión, por ejemplo `COMPLETADO` o `ABANDONADO`.
+- `RankingDAO.obtenerRanking(limite, modo)` devuelve partidas completadas del modo,
+  ordenadas por menor tiempo y, en empate, por menos intentos.
 
-```text
-jdbc:mysql://localhost:3306/allten
-```
+Los DAO cierran automáticamente sus conexiones y sentencias JDBC. Los errores de
+base de datos se propagan como `SQLException` para que la capa que los invoque pueda
+informar el fallo.
 
-El metodo `getConnection()` lee `ALLTEN_DB_USER` y `ALLTEN_DB_PASSWORD` y devuelve una instancia de `java.sql.Connection`. Si falta alguna variable, se informa que debe configurarse antes de conectar.
+## Dependencia y pruebas
 
-## Datos que se van a persistir
-
-Para la primera version del juego se propone guardar el historial de partidas y los datos necesarios para consultar el rendimiento del jugador.
-
-### Tabla `players`
-
-- `id`: identificador unico del jugador.
-- `name`: nombre del jugador.
-
-### Tabla `games`
-
-- `id`: identificador unico de la partida.
-- `player_id`: jugador que realizo la partida.
-- `started_at`: fecha y hora de inicio.
-- `ended_at`: fecha y hora de finalizacion.
-- `duration_ms`: tiempo total empleado, expresado en milisegundos.
-- `attempts`: cantidad de intentos realizados.
-- `status`: estado de la partida, por ejemplo `IN_PROGRESS`, `COMPLETED` o `ABANDONED`.
-
-La partida se completa cuando el jugador resuelve correctamente los diez objetivos. Al finalizar, la aplicacion mostrara el tiempo total y guardara el resultado en `games`. `duration_ms` permite comparar los tiempos con precision, mientras que `started_at` y `ended_at` conservan el momento exacto de la partida.
-
-El mejor tiempo de cada jugador se puede consultar con:
-
-```sql
-SELECT
-    p.name,
-    MIN(g.duration_ms) AS best_time_ms
-FROM players p
-JOIN games g ON g.player_id = p.id
-WHERE g.status = 'COMPLETED'
-GROUP BY p.id, p.name
-ORDER BY best_time_ms ASC;
-```
-
-La tabla de clasificacion se obtiene a partir del historial de partidas; no se guardara una copia separada del mejor tiempo. Asi se conservan los resultados anteriores y se evita duplicar informacion.
-
-Por ahora no se almacenaran contrasenas ni datos personales innecesarios. Tampoco se guardaran todas las operaciones realizadas; ese detalle se podra agregar despues si las reglas definitivas del juego lo requieren.
-
-## Validacion
-
-Para compilar el proyecto y ejecutar las pruebas:
+El controlador JDBC MySQL Connector/J está declarado en `pom.xml`. Para compilar y
+ejecutar las pruebas unitarias:
 
 ```powershell
 mvn test
 ```
 
-Para comprobar la conexion real desde Java, se genera el classpath de Maven:
+Las pruebas actuales no requieren un servidor MySQL; para comprobar operaciones
+reales hay que tener MySQL iniciado, crear el esquema y definir las variables de
+entorno en la misma terminal desde la que se ejecutará la aplicación.
+
+Las pruebas de integración de `DatabaseIntegrationTest` no se ejecutan por defecto.
+Para insertar una partida de demostración persistente para el jugador `ververecho`,
+usa la terminal de PowerShell donde definiste las variables de entorno:
 
 ```powershell
-mvn dependency:build-classpath "-Dmdep.outputFile=target\classpath.txt"
-$cp = "target\classes;" + (Get-Content target\classpath.txt)
-jshell --class-path $cp
+mvn "-Dtest=DatabaseIntegrationTest#guardaPartidaPersistenteParaVerverecho" "-Dallten.db.integration=true" test
 ```
 
-Dentro de JShell se ejecuta:
+Esta prueba **deja guardada** la partida completada y sus datos no se eliminan al
+terminar. Cada nueva ejecución agrega otra partida para `ververecho`. Para verificar
+las filas en Workbench:
 
-```java
-import co.edu.poli.allten.database.DatabaseConnection;
-var connection = DatabaseConnection.getConnection();
-connection.isValid(2);
-connection.close();
+```sql
+USE allten;
+
+SELECT j.id, j.apodo, p.id AS partida_id, p.tiempo_total,
+       p.intentos, p.estado, p.modo, p.fecha
+FROM jugador j
+JOIN partida p ON p.jugador_id = j.id
+WHERE j.apodo = 'ververecho'
+ORDER BY p.id DESC;
 ```
 
-El resultado esperado de `connection.isValid(2)` es `true`.
+La otra prueba, `guardaJugadorPartidaYLaExponeEnRanking`, usa un jugador temporal
+y borra únicamente los registros que ella crea. Puedes ejecutar toda la clase con:
 
-Para salir de JShell:
-
-```text
-/exit
+```powershell
+mvn "-Dtest=DatabaseIntegrationTest" "-Dallten.db.integration=true" test
 ```
 
-## Solucion de problemas
-
-- `No default schema selected`: ejecutar `USE allten;` en MySQL Shell.
-- Error por variables de entorno: volver a configurar `ALLTEN_DB_USER` y `ALLTEN_DB_PASSWORD` en la misma ventana de PowerShell.
-- Error de conexion en el puerto: comprobar que el servicio `MySQL80` este iniciado y que MySQL use el puerto `3306`.
-- Error de autenticacion: verificar que la contrasena coincida con la configurada para el usuario `root`.
+Usa las credenciales ya configuradas en esa terminal y las mismas con las que te
+conectas en Workbench. No las pegues en el comando ni las publiques.

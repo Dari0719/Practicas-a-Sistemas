@@ -1,20 +1,38 @@
 package co.edu.poli.allten.view;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 
 public class GameView {
-	private final Label statusLabel = new Label("Listo para jugar");
-	private final Button startButton = new Button("Iniciar partida");
+
+	@FXML private TextField txtNickname;
+	@FXML private RadioButton rbHardcore;
+	@FXML private Button btnIniciar;
+
 	private final Scene scene;
 
 	public GameView() {
-		Label titleLabel = new Label("All Ten Game");
-		VBox layout = new VBox(16, titleLabel, statusLabel, startButton);
-		layout.setStyle("-fx-alignment: center; -fx-padding: 32;");
-		scene = new Scene(layout, 600, 400);
+		try {
+			FXMLLoader loader = new FXMLLoader(
+					getClass().getResource("/inicio.fxml"));
+			loader.setController(this);
+			scene = new Scene(loader.load());
+		} catch (IOException e) {
+			throw new UncheckedIOException("No se pudo cargar inicio.fxml", e);
+		}
+	}
+
+	@FXML
+	private void initialize() {
+		// El botón solo se habilita cuando hay nickname
+		btnIniciar.disableProperty().bind(txtNickname.textProperty().isEmpty());
 	}
 
 	public Scene createScene() {
@@ -22,10 +40,19 @@ public class GameView {
 	}
 
 	public void setOnStartGame(Runnable action) {
-		startButton.setOnAction(event -> action.run());
+		btnIniciar.setOnAction(event -> action.run());
+	}
+
+	public String getNickname() {
+		return txtNickname.getText().trim();
+	}
+
+	public boolean isHardcore() {
+		return rbHardcore.isSelected();
 	}
 
 	public void showGameStarted() {
-		statusLabel.setText("Partida iniciada");
+		// Por ahora solo cambia el texto; aquí irá el cambio a la pantalla del juego
+		btnIniciar.setText("Partida iniciada");
 	}
 }

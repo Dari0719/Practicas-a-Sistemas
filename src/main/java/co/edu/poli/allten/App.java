@@ -2,6 +2,7 @@ package co.edu.poli.allten;
 
 import co.edu.poli.allten.controller.GameController;
 import co.edu.poli.allten.model.GameModel;
+import co.edu.poli.allten.view.AyudaView;
 import co.edu.poli.allten.view.GameView;
 import co.edu.poli.allten.view.JuegoView;
 import javafx.application.Application;
@@ -14,7 +15,8 @@ public class App extends Application {
         GameModel model = new GameModel();
         GameView view = new GameView();
         JuegoView juegoView = new JuegoView();
-        GameController controller = new GameController(model, view, juegoView, stage);
+        AyudaView ayudaView = new AyudaView();
+        GameController controller = new GameController(model, view, juegoView, ayudaView, stage);
 
         stage.setTitle("Allten");
         stage.setScene(controller.getScene());

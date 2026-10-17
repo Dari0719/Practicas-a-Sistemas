@@ -326,3 +326,60 @@
     -fx-text-fill: #86EFAC;
     -fx-border-color: #22C55E;
 }
+
+/* ===== Ventana de ayuda ===== */
+
+.ayuda-titulo {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.ayuda-numeros {
+    -fx-font-family: "Consolas", "Monospaced";
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #C9C5EE;
+}
+
+.objetivo-btn {
+    -fx-background-color: #221E4D;
+    -fx-background-radius: 8;
+    -fx-border-color: #3B3680;
+    -fx-border-radius: 8;
+    -fx-text-fill: #C9C5EE;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 36;
+    -fx-cursor: hand;
+}
+.objetivo-btn:hover { -fx-border-color: #7C4DFF; }
+.objetivo-btn:selected {
+    -fx-background-color: #7C4DFF;
+    -fx-border-color: #A78BFA;
+    -fx-text-fill: white;
+}
+.objetivo-btn:focused { -fx-border-color: white; }
+
+.lista-ayuda {
+    -fx-control-inner-background: #221E4D;
+    -fx-control-inner-background-alt: #221E4D;
+    -fx-background-color: #221E4D;
+    -fx-background-radius: 10;
+    -fx-border-color: #3B3680;
+    -fx-border-radius: 10;
+    -fx-padding: 4;
+}
+.lista-ayuda .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-family: "Consolas", "Monospaced";
+    -fx-font-size: 17px;
+    -fx-padding: 9 12;
+}
+.lista-ayuda .list-cell:filled:hover    { -fx-background-color: rgba(255, 255, 255, 0.06); }
+.lista-ayuda .list-cell:filled:selected { -fx-background-color: rgba(124, 77, 255, 0.45); }
+.lista-ayuda .placeholder .label {
+    -fx-text-fill: #B9B4E0;
+    -fx-font-size: 14px;
+}

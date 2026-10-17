@@ -19,13 +19,19 @@ public class JuegoView {
 	@FXML private Label lblJugador;
 	@FXML private Label lblModo;
 	@FXML private Button btnSalir;
+	@FXML private Button btnAyuda;
 	@FXML private Label lblProgreso;
 	@FXML private ProgressBar barProgreso;
 	@FXML private Label lblTiempo;
 	@FXML private GridPane gridObjetivos;
 	@FXML private Label lblExpresion;
+	@FXML private Button btnFicha1;
+	@FXML private Button btnFicha2;
+	@FXML private Button btnFicha3;
+	@FXML private Button btnFicha4;
 
 	private List<Label> objetivos;
+	private Button[] fichas;
 	private final Scene scene;
 
 	public JuegoView() {
@@ -46,6 +52,7 @@ public class JuegoView {
 				.filter(Label.class::isInstance)
 				.map(Label.class::cast)
 				.toList();
+		fichas = new Button[] { btnFicha1, btnFicha2, btnFicha3, btnFicha4 };
 	}
 
 	public Scene createScene() {
@@ -58,6 +65,13 @@ public class JuegoView {
 		lblModo.getStyleClass().remove("chip-hardcore");
 		if (mode == GameModel.Mode.HARDCORE) {
 			lblModo.getStyleClass().add("chip-hardcore");
+		}
+	}
+
+	/** Muestra en las cuatro fichas los números del reto. */
+	public void showNumbers(int[] numeros) {
+		for (int i = 0; i < fichas.length; i++) {
+			fichas[i].setText(String.valueOf(numeros[i]));
 		}
 	}
 
@@ -94,6 +108,10 @@ public class JuegoView {
 		if (!lblExpresion.getStyleClass().contains("expresion-exito")) {
 			lblExpresion.getStyleClass().add("expresion-exito");
 		}
+	}
+
+	public void setOnHelp(Runnable action) {
+		btnAyuda.setOnAction(event -> action.run());
 	}
 
 	public void setOnExit(Runnable action) {

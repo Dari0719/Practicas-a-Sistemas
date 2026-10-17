@@ -1,6 +1,7 @@
 package co.edu.poli.allten.controller;
 
 import co.edu.poli.allten.model.GameModel;
+import co.edu.poli.allten.view.AyudaView;
 import co.edu.poli.allten.view.GameView;
 import co.edu.poli.allten.view.JuegoView;
 import javafx.animation.Animation;
@@ -14,13 +15,16 @@ public class GameController {
 	private final GameModel model;
 	private final GameView view;
 	private final JuegoView juegoView;
+	private final AyudaView ayudaView;
 	private final Stage stage;
 	private final Timeline timer;
 
-	public GameController(GameModel model, GameView view, JuegoView juegoView, Stage stage) {
+	public GameController(GameModel model, GameView view, JuegoView juegoView,
+			AyudaView ayudaView, Stage stage) {
 		this.model = model;
 		this.view = view;
 		this.juegoView = juegoView;
+		this.ayudaView = ayudaView;
 		this.stage = stage;
 
 		// Actualiza el tiempo transcurrido cada segundo
@@ -29,6 +33,8 @@ public class GameController {
 
 		view.setOnStartGame(this::startGame);
 		juegoView.setOnExit(this::backToStart);
+		juegoView.setOnHelp(this::openHelp);
+		ayudaView.setOnObjectiveSelected(this::showHints);
 	}
 
 	public Scene getScene() {
@@ -42,6 +48,7 @@ public class GameController {
 		model.startGame(view.getNickname(), mode);
 
 		juegoView.showPlayer(model.getNickname(), model.getMode());
+		juegoView.showNumbers(model.getNumbers());
 		juegoView.showMessage("Arma tu operación");
 		refreshStatus();
 		timer.playFromStart();
@@ -51,6 +58,25 @@ public class GameController {
 		// completeObjective(1);
 		// completeObjective(4);
 		// completeObjective(7);
+	}
+
+	/** Abre la ayuda con el primer objetivo que aún no se ha logrado. */
+	private void openHelp() {
+		ayudaView.open(stage, model.getNumbers(), model.getCompletedObjectives(),
+				firstPendingObjective());
+	}
+
+	private void showHints(int objective) {
+		ayudaView.showHints(objective, model.getHints(objective));
+	}
+
+	private int firstPendingObjective() {
+		for (int objective = 1; objective <= GameModel.TOTAL_OBJECTIVES; objective++) {
+			if (!model.getCompletedObjectives().contains(objective)) {
+				return objective;
+			}
+		}
+		return 1;
 	}
 
 	/**

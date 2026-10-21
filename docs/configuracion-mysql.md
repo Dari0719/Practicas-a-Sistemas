@@ -1,6 +1,6 @@
 # Configuración de la base de datos MySQL
 
-## Esquema
+## OBJETIVOS
 
 El esquema está definido en `src/main/resources/db/schema.sql` y corresponde
 al diagrama entidad-relación:

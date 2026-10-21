@@ -33,7 +33,7 @@ public class DatabaseIntegrationTest {
         ConexionBaseDatos conexion = new ConexionBaseDatos();
         JugadorDAO jugadorDAO = new JugadorDAO(conexion);
         PartidaDAO partidaDAO = new PartidaDAO(conexion);
-        String apodo = "ververecho";
+        String apodo = "manolo";
 
         Jugador jugador = jugadorDAO.buscarPorApodo(apodo);
         if (jugador == null) {

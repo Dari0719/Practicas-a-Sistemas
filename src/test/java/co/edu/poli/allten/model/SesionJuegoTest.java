@@ -11,6 +11,24 @@ import org.junit.Test;
 public class SesionJuegoTest {
 
     @Test
+    public void constructor_rechazaJugadorOModoNulos() {
+        assertThrows(
+                NullPointerException.class,
+                () -> new SesionJuego(null, ModoJuego.NORMAL));
+        assertThrows(
+                NullPointerException.class,
+                () -> new SesionJuego(new Jugador("Lili"), null));
+    }
+
+    @Test
+    public void iniciarSesion_soloPuedeEjecutarseUnaVez() {
+        SesionJuego sesion = new SesionJuego(new Jugador("Lili"), ModoJuego.NORMAL);
+        sesion.iniciarSesion();
+
+        assertThrows(IllegalStateException.class, sesion::iniciarSesion);
+    }
+
+    @Test
     public void iniciarSesion_asignaJugadorGeneraNumerosYCreaDiezRondas() {
         Jugador jugador = new Jugador("  Liliana  ");
         SesionJuego sesion = new SesionJuego(jugador, ModoJuego.NORMAL);
@@ -26,6 +44,26 @@ public class SesionJuegoTest {
         assertFalse(sesion.estaCompleta());
         assertTrue(sesion.getHoraInicio() > 0);
         assertTrue(sesion.getFecha() != null);
+    }
+
+    @Test
+    public void iniciarSesion_exponeColeccionesInmutables() {
+        SesionJuego sesion = new SesionJuego(new Jugador("Lili"), ModoJuego.NORMAL);
+        sesion.iniciarSesion();
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> sesion.getNumerosDisponibles().add(5));
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> sesion.getRondas().clear());
+    }
+
+    @Test
+    public void finalizarSesion_rechazaUnaSesionQueNoHaIniciado() {
+        SesionJuego sesion = new SesionJuego(new Jugador("Lili"), ModoJuego.NORMAL);
+
+        assertThrows(IllegalStateException.class, sesion::finalizarSesion);
     }
 
     @Test

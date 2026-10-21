@@ -1,0 +1,122 @@
+.root {
+    -fx-background-color: #1a1b26;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.app-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+}
+
+.header-separator {
+    -fx-opacity: 0.25;
+}
+
+.success-icon {
+    -fx-alignment: center;
+    -fx-background-color: #26233d;
+    -fx-background-radius: 11px;
+    -fx-border-color: #7b5cff;
+    -fx-border-radius: 11px;
+    -fx-border-width: 1px;
+    -fx-pref-height: 42px;
+    -fx-pref-width: 42px;
+    -fx-text-fill: #d8d0ff;
+    -fx-font-size: 24px;
+}
+
+.completion-title {
+    -fx-text-fill: #e6e2ff;
+    -fx-font-size: 27px;
+    -fx-font-weight: bold;
+}
+
+.completion-subtitle {
+    -fx-text-fill: #c3bfd8;
+    -fx-font-size: 13px;
+}
+
+.summary-card,
+.ranking-card {
+    -fx-background-color: #232233;
+    -fx-background-radius: 13px;
+    -fx-border-color: #454258;
+    -fx-border-radius: 13px;
+    -fx-border-width: 1px;
+}
+
+.detail-caption {
+    -fx-text-fill: #a8a4bd;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.player-name {
+    -fx-text-fill: #e6e2ff;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.mode-badge {
+    -fx-background-color: #7b45f6;
+    -fx-background-radius: 18px;
+    -fx-padding: 5px 14px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.card-separator {
+    -fx-opacity: 0.3;
+}
+
+.time-caption {
+    -fx-text-fill: #d0cde2;
+    -fx-font-size: 12px;
+}
+
+.elapsed-time {
+    -fx-text-fill: #e7e3ff;
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+}
+
+.time-description,
+.footer-note {
+    -fx-text-fill: #9e9bb3;
+    -fx-font-size: 10px;
+}
+
+.ranking-button,
+.secondary-button,
+.primary-button {
+    -fx-background-radius: 10px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 16px;
+    -fx-cursor: hand;
+}
+
+.ranking-button,
+.secondary-button {
+    -fx-background-color: #262344;
+    -fx-border-color: #7657dd;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #e6e2ff;
+}
+
+.ranking-button:hover,
+.secondary-button:hover {
+    -fx-background-color: #34305a;
+}
+
+.primary-button {
+    -fx-background-color: linear-gradient(to right, #7b45f6, #5657ef);
+    -fx-text-fill: #ffffff;
+}
+
+.primary-button:hover {
+    -fx-background-color: #6949e8;
+}

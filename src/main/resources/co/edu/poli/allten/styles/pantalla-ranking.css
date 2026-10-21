@@ -1,0 +1,95 @@
+.root {
+    -fx-background-color: #1a1b26;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.app-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+
+.screen-title {
+    -fx-text-fill: #e6e2ff;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.screen-subtitle,
+.empty-message {
+    -fx-text-fill: #aaa6c1;
+    -fx-font-size: 13px;
+}
+
+.mode-badge {
+    -fx-background-color: #7b45f6;
+    -fx-background-radius: 18px;
+    -fx-padding: 7px 14px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.ranking-card {
+    -fx-background-color: #232233;
+    -fx-background-radius: 13px;
+    -fx-border-color: #454258;
+    -fx-border-radius: 13px;
+    -fx-border-width: 1px;
+}
+
+.table-view {
+    -fx-background-color: #232233;
+    -fx-background-radius: 8px;
+    -fx-border-color: #454258;
+    -fx-border-radius: 8px;
+    -fx-control-inner-background: #232233;
+    -fx-table-cell-border-color: #373549;
+    -fx-text-background-color: #e6e2ff;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #2b293c;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #454258 transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #bdb8d7;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: #232233;
+    -fx-text-background-color: #e6e2ff;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #272638;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #403568;
+}
+
+.secondary-button {
+    -fx-background-color: #262344;
+    -fx-background-radius: 10px;
+    -fx-border-color: #7657dd;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 10px 18px;
+    -fx-text-fill: #e6e2ff;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #34305a;
+}

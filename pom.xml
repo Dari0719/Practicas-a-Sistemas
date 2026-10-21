@@ -49,7 +49,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <configuration>
-          <mainClass>co.edu.poli.allten.App</mainClass>
+          <mainClass>co.edu.poli.allten.view.App</mainClass>
         </configuration>
       </plugin>
     </plugins>

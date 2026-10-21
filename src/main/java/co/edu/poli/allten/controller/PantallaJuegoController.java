@@ -1,10 +1,14 @@
 package co.edu.poli.allten.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
+import co.edu.poli.allten.database.ConexionBaseDatos;
+import co.edu.poli.allten.database.JugadorDAO;
+import co.edu.poli.allten.database.PartidaDAO;
 import co.edu.poli.allten.model.BuscadorSoluciones;
 import co.edu.poli.allten.model.Ronda;
 import co.edu.poli.allten.model.ResultadoValidacion;
@@ -13,9 +17,11 @@ import co.edu.poli.allten.model.ValidadorExpresion;
 import co.edu.poli.allten.view.App;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +29,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
@@ -39,6 +46,9 @@ public class PantallaJuegoController {
 
     @FXML
     private Button modeBadge;
+
+    @FXML
+    private Label cronometroLabel;
 
     @FXML
     private GridPane objetivosGrid;
@@ -72,6 +82,7 @@ public class PantallaJuegoController {
     private final Map<Button, ParallelTransition> animacionesDisponibilidad = new IdentityHashMap<>();
     private ScaleTransition animacionEntrada;
     private PauseTransition pausaResaltadoEntrada;
+    private Timeline cronometro;
     private boolean animacionEntradaPendiente;
 
     @FXML
@@ -124,6 +135,10 @@ public class PantallaJuegoController {
             botonesNumeros.get(indice).setText(String.valueOf(numeros.get(indice)));
         }
         modeBadge.setText(sesion.getModo().name());
+        actualizarCronometro();
+        cronometro = new Timeline(new KeyFrame(Duration.seconds(1), evento -> actualizarCronometro()));
+        cronometro.setCycleCount(Timeline.INDEFINITE);
+        cronometro.play();
         actualizarDisponibilidadNumeros();
         actualizarObjetivoSeleccionado();
     }
@@ -225,10 +240,9 @@ public class PantallaJuegoController {
             actualizarObjetivoSeleccionado();
 
             if (sesion.estaCompleta()) {
-                mostrarAlerta(
-                        Alert.AlertType.INFORMATION,
-                        "¡Partida completada!",
-                        "¡Resolviste todos los objetivos!");
+                cronometro.stop();
+                actualizarCronometro();
+                finalizarPartida();
             } else {
                 mostrarAlerta(
                         Alert.AlertType.INFORMATION,
@@ -250,6 +264,49 @@ public class PantallaJuegoController {
             case VALIDO -> throw new IllegalStateException("Resultado de validación inesperado.");
         };
         mostrarAlerta(Alert.AlertType.WARNING, "No se pudo validar", mensaje);
+    }
+
+    private void actualizarCronometro() {
+        long segundosTotales = sesion.getTiempoTotal() / 1000;
+        cronometroLabel.setText(String.format(
+                "%02d:%02d", segundosTotales / 60, segundosTotales % 60));
+    }
+
+    private void finalizarPartida() {
+        String errorPersistencia = null;
+        try {
+            ConexionBaseDatos conexion = new ConexionBaseDatos();
+            new JugadorDAO(conexion).guardar(sesion.getJugador());
+            new PartidaDAO(conexion).guardar(sesion);
+        } catch (SQLException | IllegalStateException excepcion) {
+            errorPersistencia = excepcion.getMessage();
+        }
+
+        try {
+            FXMLLoader cargador = new FXMLLoader(
+                    App.class.getResource("/co/edu/poli/allten/views/pantalla-resumen.fxml"));
+            Parent raiz = cargador.load();
+            PantallaResumenController controlador = cargador.getController();
+            controlador.configurarSesion(sesion);
+
+            Stage escenario = (Stage) modeBadge.getScene().getWindow();
+            escenario.setScene(new Scene(raiz));
+        } catch (IOException excepcion) {
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "No se pudo abrir el resumen",
+                    "La partida terminó, pero ocurrió un error al cargar el resumen: "
+                            + excepcion.getMessage());
+            return;
+        }
+
+        if (errorPersistencia != null) {
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "No se pudo guardar la partida",
+                    "El resumen está disponible, pero el resultado no se guardó y no aparecerá "
+                            + "en el ranking.\n\nDetalle: " + errorPersistencia);
+        }
     }
 
     private String normalizarOperadores(String expresion) {

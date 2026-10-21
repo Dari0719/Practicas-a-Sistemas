@@ -32,6 +32,9 @@ public class PantallaInicioController {
     @FXML
     private Button startButton;
 
+    @FXML
+    private Button rankingButton;
+
     private ScaleTransition normalTransition;
     private ScaleTransition hardcoreTransition;
     private ScaleTransition startTransition;
@@ -107,6 +110,25 @@ public class PantallaInicioController {
                     Alert.AlertType.ERROR,
                     "No se pudo iniciar la partida",
                     excepcion.getMessage());
+        }
+    }
+
+    @FXML
+    private void consultarRanking() {
+        try {
+            FXMLLoader cargador = new FXMLLoader(
+                    App.class.getResource("/co/edu/poli/allten/views/pantalla-ranking.fxml"));
+            Parent raiz = cargador.load();
+            PantallaRankingController controlador = cargador.getController();
+
+            Stage escenario = (Stage) rankingButton.getScene().getWindow();
+            escenario.setScene(new Scene(raiz));
+            controlador.configurarModo(modoSeleccionado);
+        } catch (IOException excepcion) {
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "No se pudo abrir el ranking",
+                    "Ocurrió un error al cargar la pantalla de ranking: " + excepcion.getMessage());
         }
     }
 

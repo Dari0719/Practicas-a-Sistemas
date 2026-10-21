@@ -80,3 +80,20 @@
 .primary-button:hover {
     -fx-background-color: linear-gradient(to right, #6a4de5, #8957e8);
 }
+
+.ranking-home-button {
+    -fx-background-color: #232433;
+    -fx-text-fill: #e6e2ff;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #7657dd;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.ranking-home-button:hover {
+    -fx-background-color: #34305a;
+}

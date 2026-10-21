@@ -15,6 +15,21 @@
     -fx-text-fill: #7b5cff;
 }
 
+.timer-badge {
+    -fx-background-color: #232433;
+    -fx-background-radius: 8px;
+    -fx-border-color: #7b5cff;
+    -fx-border-radius: 8px;
+    -fx-padding: 5px 9px;
+}
+
+.timer-icon,
+.timer-label {
+    -fx-text-fill: #d8d0ff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
 .mode-badge {
     -fx-background-color: #7b5cff;
     -fx-text-fill: #ffffff;

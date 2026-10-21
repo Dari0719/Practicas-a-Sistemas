@@ -87,6 +87,12 @@ Los DAO cierran automáticamente sus conexiones y sentencias JDBC. Los errores d
 base de datos se propagan como `SQLException` para que la capa que los invoque pueda
 informar el fallo.
 
+En la pantalla de inicio puedes abrir **Consultar ranking** directamente, sin
+iniciar una partida. Primero selecciona el modo que quieres consultar; el ranking
+muestra hasta 10 partidas completadas de ese modo. Desde la pantalla del ranking,
+**Actualizar** vuelve a consultar la base de datos y **Volver** regresa al inicio
+si abriste el ranking desde allí.
+
 ## Dependencia y pruebas
 
 El controlador JDBC MySQL Connector/J está declarado en `pom.xml`. Para compilar y
@@ -99,6 +105,13 @@ mvn test
 Las pruebas actuales no requieren un servidor MySQL; para comprobar operaciones
 reales hay que tener MySQL iniciado, crear el esquema y definir las variables de
 entorno en la misma terminal desde la que se ejecutará la aplicación.
+
+Si aparece `Access denied for user ...`, la conexión está siendo rechazada antes
+de consultar el ranking. Configura `ALLTEN_DB_USER` y `ALLTEN_DB_PASSWORD` con
+un usuario y contraseña válidos de MySQL. Si ejecutas desde VS Code, inicia VS
+Code desde la terminal que ya tenga esas variables o reinícialo después de
+configurarlas. No es necesario usar `root`; el usuario debe tener permisos de
+lectura y escritura en `allten`.
 
 Las pruebas de integración de `DatabaseIntegrationTest` no se ejecutan por defecto.
 Para insertar una partida de demostración persistente para el jugador `ververecho`,

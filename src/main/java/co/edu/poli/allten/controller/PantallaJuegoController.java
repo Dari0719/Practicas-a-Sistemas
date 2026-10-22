@@ -8,8 +8,9 @@ import java.util.Map;
 
 import co.edu.poli.allten.database.ConexionBaseDatos;
 import co.edu.poli.allten.database.JugadorDAO;
-import co.edu.poli.allten.database.PartidaDAO;
+import co.edu.poli.allten.database.SesionJuegoDAO;
 import co.edu.poli.allten.model.BuscadorSoluciones;
+import co.edu.poli.allten.model.ModoJuego;
 import co.edu.poli.allten.model.Ronda;
 import co.edu.poli.allten.model.ResultadoValidacion;
 import co.edu.poli.allten.model.SesionJuego;
@@ -29,9 +30,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -75,6 +79,12 @@ public class PantallaJuegoController {
     private Button btnIgual;
 
     @FXML
+    private Button potenciaButton;
+
+    @FXML
+    private Button raizButton;
+
+    @FXML
     private TextField campoExpresion;
 
     private SesionJuego sesion;
@@ -104,10 +114,15 @@ public class PantallaJuegoController {
             String texto = cambio.getText()
                     .replace('*', '×')
                     .replace('/', '÷');
-            if (!texto.matches("[0-9()+\\-×÷\\s]*")) {
+            if (!texto.matches("[0-9()+\\-×÷^√\\s]*")) {
                 return null;
             }
             cambio.setText(texto);
+            if (sesion != null
+                    && sesion.getModo() == ModoJuego.NORMAL
+                    && (texto.indexOf('^') >= 0 || texto.indexOf('√') >= 0)) {
+                return null;
+            }
             if (sesion != null && !numerosDentroDelLimite(cambio.getControlNewText())) {
                 return null;
             }
@@ -135,6 +150,11 @@ public class PantallaJuegoController {
             botonesNumeros.get(indice).setText(String.valueOf(numeros.get(indice)));
         }
         modeBadge.setText(sesion.getModo().name());
+        boolean esHardcore = sesion.getModo() == ModoJuego.HARDCORE;
+        potenciaButton.setVisible(esHardcore);
+        potenciaButton.setManaged(esHardcore);
+        raizButton.setVisible(esHardcore);
+        raizButton.setManaged(esHardcore);
         actualizarCronometro();
         cronometro = new Timeline(new KeyFrame(Duration.seconds(1), evento -> actualizarCronometro()));
         cronometro.setCycleCount(Timeline.INDEFINITE);
@@ -146,14 +166,20 @@ public class PantallaJuegoController {
     @FXML
     private void consultarReglas() {
         animarSeleccion(reglasButton);
+        String operaciones = sesion.getModo() == ModoJuego.HARDCORE
+                ? "Operaciones permitidas: suma (+), resta (-), multiplicación (×), "
+                        + "división (÷), potencia (^), raíz cuadrada (√) como máximo una vez "
+                        + "por expresión, y paréntesis. Cada respuesta debe incluir una "
+                        + "operación avanzada no trivial."
+                : "Operaciones permitidas: suma (+), resta (-), multiplicación (×), "
+                        + "división (÷) y paréntesis.";
         mostrarAlerta(
                 Alert.AlertType.INFORMATION,
                 "Reglas del juego",
                 "Resuelve los objetivos del 1 al 10 en cualquier orden.\n\n"
                         + "Cada expresión debe usar los cuatro números generados exactamente "
                         + "una vez. Puedes reutilizar el conjunto en cada objetivo.\n\n"
-                        + "Operaciones permitidas: suma (+), resta (-), multiplicación (×), "
-                        + "división (÷) y paréntesis. No se permite dividir entre cero.\n\n"
+                        + operaciones + " No se permite dividir entre cero.\n\n"
                         + "El resultado debe ser un objetivo pendiente.");
     }
 
@@ -187,17 +213,32 @@ public class PantallaJuegoController {
                 return;
             }
 
-            mostrarAlerta(
-                    Alert.AlertType.INFORMATION,
-                    "Pista para el objetivo " + objetivoSeleccionado,
-                    "Una forma de obtener " + objetivoSeleccionado + " es:\n\n"
-                            + soluciones.get(0));
+            mostrarPistaSeleccionable(objetivoSeleccionado, soluciones.get(0));
         } catch (IllegalArgumentException | UnsupportedOperationException excepcion) {
             mostrarAlerta(
                     Alert.AlertType.ERROR,
                     "No se pudo generar la pista",
                     excepcion.getMessage());
         }
+    }
+
+    private void mostrarPistaSeleccionable(int objetivo, String expresion) {
+        Dialog<Void> dialogo = new Dialog<>();
+        dialogo.setTitle("Pista para el objetivo " + objetivo);
+        dialogo.setHeaderText(null);
+        dialogo.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
+
+        Label instrucciones = new Label((sesion.getModo() == ModoJuego.HARDCORE
+                ? "La pista respeta las reglas Hardcore e incluye una operación "
+                        + "avanzada no trivial.\n\n"
+                : "")
+                + "Una forma de obtener " + objetivo + " es:");
+        TextField campoPista = new TextField(expresion);
+        campoPista.setEditable(false);
+        campoPista.setFocusTraversable(true);
+        VBox contenido = new VBox(10, instrucciones, campoPista);
+        dialogo.getDialogPane().setContent(contenido);
+        dialogo.showAndWait();
     }
 
     @FXML
@@ -277,7 +318,7 @@ public class PantallaJuegoController {
         try {
             ConexionBaseDatos conexion = new ConexionBaseDatos();
             new JugadorDAO(conexion).guardar(sesion.getJugador());
-            new PartidaDAO(conexion).guardar(sesion);
+            new SesionJuegoDAO(conexion).guardar(sesion);
         } catch (SQLException | IllegalStateException excepcion) {
             errorPersistencia = excepcion.getMessage();
         }

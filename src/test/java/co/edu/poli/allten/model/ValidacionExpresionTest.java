@@ -99,6 +99,26 @@ public class ValidacionExpresionTest {
     }
 
     @Test
+    public void validarExpresion_hardcoreExigeOperacionAvanzadaNoTrivialYUnaSolaRaiz() {
+        assertEquals(
+                ResultadoValidacion.VALIDO,
+                validador.validarExpresion(
+                        "√4 * 1 * 2 - 3", 1, Arrays.asList(4, 1, 2, 3), ModoJuego.HARDCORE));
+        assertEquals(
+                ResultadoValidacion.OPERACION_INVALIDA,
+                validador.validarExpresion(
+                        "2 ^ 1 + 3 + 4 + 5", 14, Arrays.asList(2, 1, 3, 4, 5), ModoJuego.HARDCORE));
+        assertEquals(
+                ResultadoValidacion.OPERACION_INVALIDA,
+                validador.validarExpresion(
+                        "√1 + 2 + 3 + 4", 10, Arrays.asList(1, 2, 3, 4), ModoJuego.HARDCORE));
+        assertEquals(
+                ResultadoValidacion.OPERACION_INVALIDA,
+                validador.validarExpresion(
+                        "√√16 + 1 + 2", 5, Arrays.asList(16, 1, 2), ModoJuego.HARDCORE));
+    }
+
+    @Test
     public void calcularResultado_respetaPrecedenciaSignosYParentesis() {
         assertEquals(512.0, validador.calcularResultado("2^3^2"), 0.0000001);
         assertEquals(-4.0, validador.calcularResultado("-2^2"), 0.0000001);

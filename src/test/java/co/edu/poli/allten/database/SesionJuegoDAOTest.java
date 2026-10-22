@@ -7,15 +7,15 @@ import co.edu.poli.allten.model.ModoJuego;
 import co.edu.poli.allten.model.SesionJuego;
 import org.junit.Test;
 
-public class PartidaDAOTest {
+public class SesionJuegoDAOTest {
 
     @Test
     public void guardar_rechazaUnaPartidaQueSigueEnCurso() {
         Jugador jugador = new Jugador(1, "jugador_prueba");
         SesionJuego sesion = new SesionJuego(jugador, ModoJuego.NORMAL);
         sesion.iniciarSesion();
-        PartidaDAO partidaDAO = new PartidaDAO(new ConexionBaseDatos());
+        SesionJuegoDAO sesionJuegoDAO = new SesionJuegoDAO(new ConexionBaseDatos());
 
-        assertThrows(IllegalStateException.class, () -> partidaDAO.guardar(sesion));
+        assertThrows(IllegalStateException.class, () -> sesionJuegoDAO.guardar(sesion));
     }
 }

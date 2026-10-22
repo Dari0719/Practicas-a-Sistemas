@@ -70,14 +70,6 @@ public class PantallaInicioController {
             animarEscala(startTransition, 1.0);
         });
 
-        if (modoSeleccionado == ModoJuego.HARDCORE) {
-            mostrarAlerta(
-                    Alert.AlertType.INFORMATION,
-                    "Modo no disponible",
-                    "El modo Hardcore todavía no está implementado. Selecciona Normal para iniciar.");
-            return;
-        }
-
         String apodo = campoApodo.getText();
         if (apodo == null || apodo.isBlank()) {
             mostrarAlerta(

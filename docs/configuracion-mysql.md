@@ -77,7 +77,7 @@ No guardes la contraseña en el código ni en archivos versionados. La URL apunt
 - `JugadorDAO.guardar(jugador)` inserta el jugador o recupera el identificador del
   apodo existente; actualiza el ID dentro del objeto.
 - `JugadorDAO.buscarPorApodo(apodo)` devuelve el jugador o `null` si no existe.
-- `PartidaDAO.guardar(sesion)` guarda una sesión iniciada. El jugador debe haberse
+- `SesionJuegoDAO.guardar(sesion)` guarda una sesión iniciada. El jugador debe haberse
   guardado primero para tener una clave foránea válida. Se guarda el estado actual
   de la sesión, por ejemplo `COMPLETADO` o `ABANDONADO`.
 - `RankingDAO.obtenerRanking(limite, modo)` devuelve partidas completadas del modo,

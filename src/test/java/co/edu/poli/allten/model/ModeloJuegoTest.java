@@ -35,12 +35,29 @@ public class ModeloJuegoTest {
     }
 
     @Test
-    public void buscarSoluciones_lanzaExcepcionCuandoModoNoEstaImplementado() {
+    public void buscarSoluciones_hardcoreEncuentraExpresionesAvanzadasParaTodosLosObjetivos() {
         BuscadorSoluciones buscador = new BuscadorSoluciones();
+        ValidadorExpresion validador = new ValidadorExpresion();
+        List<Integer> numeros = Arrays.asList(1, 2, 3, 4);
 
-        assertThrows(
-                UnsupportedOperationException.class,
-                () -> buscador.buscarSoluciones(Arrays.asList(1, 2, 3, 4), 10, ModoJuego.HARDCORE));
+        assertTrue(buscador.tieneSolucionTodosLosObjetivos(numeros, ModoJuego.HARDCORE));
+        for (int objetivo = 1; objetivo <= 10; objetivo++) {
+            int numeroObjetivo = objetivo;
+            List<String> soluciones =
+                    buscador.buscarSoluciones(numeros, numeroObjetivo, ModoJuego.HARDCORE);
+
+            assertFalse(
+                    "Debe existir solución para el objetivo " + numeroObjetivo,
+                    soluciones.isEmpty());
+            for (String solucion : soluciones) {
+                assertEquals(
+                        "Expresión Hardcore inválida para el objetivo " + numeroObjetivo
+                                + ": " + solucion,
+                        ResultadoValidacion.VALIDO,
+                        validador.validarExpresion(
+                                solucion, numeroObjetivo, numeros, ModoJuego.HARDCORE));
+            }
+        }
     }
 
     @Test
@@ -78,12 +95,11 @@ public class ModeloJuegoTest {
     }
 
     @Test
-    public void generar_retornaListaInmutableYRechazaModoNoImplementado() {
+    public void generar_retornaListaInmutableYRechazaModoNulo() {
         GeneradorNumeros generador = new GeneradorNumeros();
         List<Integer> numeros = generador.generar(ModoJuego.NORMAL);
 
         assertThrows(UnsupportedOperationException.class, () -> numeros.add(5));
-        assertThrows(UnsupportedOperationException.class, () -> generador.generar(ModoJuego.HARDCORE));
         assertThrows(NullPointerException.class, () -> generador.generar(null));
     }
 
@@ -95,5 +111,14 @@ public class ModeloJuegoTest {
         List<Integer> numeros = generador.generar(ModoJuego.NORMAL);
 
         assertTrue(buscador.tieneSolucionTodosLosObjetivos(numeros, ModoJuego.NORMAL));
+    }
+
+    @Test
+    public void generarHardcore_retornaNumerosQuePermitenResolverLosDiezObjetivos() {
+        List<Integer> numeros = new GeneradorNumeros().generar(ModoJuego.HARDCORE);
+
+        assertEquals(4, numeros.size());
+        assertTrue(new BuscadorSoluciones()
+                .tieneSolucionTodosLosObjetivos(numeros, ModoJuego.HARDCORE));
     }
 }

@@ -9,11 +9,11 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 /** Persiste el resultado y los metadatos de una sesión de juego. */
-public class PartidaDAO {
+public class SesionJuegoDAO {
 
     private final ConexionBaseDatos conexion;
 
-    public PartidaDAO(ConexionBaseDatos conexion) {
+    public SesionJuegoDAO(ConexionBaseDatos conexion) {
         this.conexion = Objects.requireNonNull(conexion, "La conexión es obligatoria.");
     }
 

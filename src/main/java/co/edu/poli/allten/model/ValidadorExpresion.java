@@ -40,9 +40,17 @@ public class ValidadorExpresion {
         }
 
         double resultado;
+        AnalizadorExpresion analizador =
+                new AnalizadorExpresion(expresionSinEspacios);
         try {
-            resultado = calcularResultado(expresionSinEspacios);
+            resultado = analizador.calcular();
         } catch (IllegalArgumentException | ArithmeticException e) {
+            return ResultadoValidacion.OPERACION_INVALIDA;
+        }
+
+        if (modo == ModoJuego.HARDCORE
+                && (analizador.getCantidadRaices() > 1
+                || !analizador.tieneOperacionAvanzadaNoTrivial())) {
             return ResultadoValidacion.OPERACION_INVALIDA;
         }
 
@@ -124,6 +132,8 @@ public class ValidadorExpresion {
     private static class AnalizadorExpresion {
         private final String expresion;
         private int indice;
+        private int cantidadRaices;
+        private boolean operacionAvanzadaNoTrivial;
 
         private AnalizadorExpresion(String expresion) {
             this.expresion = expresion;
@@ -135,6 +145,14 @@ public class ValidadorExpresion {
                 throw new IllegalArgumentException("Hay caracteres inesperados");
             }
             return resultado;
+        }
+
+        private int getCantidadRaices() {
+            return cantidadRaices;
+        }
+
+        private boolean tieneOperacionAvanzadaNoTrivial() {
+            return operacionAvanzadaNoTrivial;
         }
 
         private double parsearSuma() {
@@ -176,7 +194,11 @@ public class ValidadorExpresion {
             double base = parsearRaiz();
             if (haySiguiente('^')) {
                 indice++;
-                return Math.pow(base, parsearUnario());
+                double exponente = parsearUnario();
+                if (exponente != 0 && exponente != 1) {
+                    operacionAvanzadaNoTrivial = true;
+                }
+                return Math.pow(base, exponente);
             }
             return base;
         }
@@ -184,9 +206,13 @@ public class ValidadorExpresion {
         private double parsearRaiz() {
             if (haySiguiente('√')) {
                 indice++;
+                cantidadRaices++;
                 double radicando = parsearRaiz();
                 if (radicando < 0) {
                     throw new ArithmeticException("No se puede calcular la raíz de un negativo");
+                }
+                if (radicando > 1) {
+                    operacionAvanzadaNoTrivial = true;
                 }
                 return Math.sqrt(radicando);
             }
@@ -216,6 +242,7 @@ public class ValidadorExpresion {
             return Double.parseDouble(expresion.substring(inicio, indice));
         }
 
+        // Permite revisar el carácter actual sin avanzar el índice.
         private boolean haySiguiente(char caracter) {
             return indice < expresion.length() && expresion.charAt(indice) == caracter;
         }

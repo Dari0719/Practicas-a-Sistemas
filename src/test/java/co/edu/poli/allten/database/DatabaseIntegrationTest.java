@@ -32,7 +32,7 @@ public class DatabaseIntegrationTest {
 
         ConexionBaseDatos conexion = new ConexionBaseDatos();
         JugadorDAO jugadorDAO = new JugadorDAO(conexion);
-        PartidaDAO partidaDAO = new PartidaDAO(conexion);
+        SesionJuegoDAO sesionJuegoDAO = new SesionJuegoDAO(conexion);
         String apodo = "manolo";
 
         Jugador jugador = jugadorDAO.buscarPorApodo(apodo);
@@ -55,7 +55,7 @@ public class DatabaseIntegrationTest {
         }
         assertEquals(EstadoJuego.COMPLETADO, sesion.getEstado());
 
-        partidaDAO.guardar(sesion);
+        sesionJuegoDAO.guardar(sesion);
 
         try (Connection conn = conexion.obtenerConexion();
                 PreparedStatement sentencia = conn.prepareStatement("""
@@ -89,7 +89,7 @@ public class DatabaseIntegrationTest {
 
         ConexionBaseDatos conexion = new ConexionBaseDatos();
         JugadorDAO jugadorDAO = new JugadorDAO(conexion);
-        PartidaDAO partidaDAO = new PartidaDAO(conexion);
+        SesionJuegoDAO sesionJuegoDAO = new SesionJuegoDAO(conexion);
         RankingDAO rankingDAO = new RankingDAO(conexion);
         String apodo = "junit_" + UUID.randomUUID().toString().replace("-", "");
         int jugadorId = 0;
@@ -122,7 +122,7 @@ public class DatabaseIntegrationTest {
             }
             assertEquals(EstadoJuego.COMPLETADO, sesion.getEstado());
 
-            partidaDAO.guardar(sesion);
+            sesionJuegoDAO.guardar(sesion);
 
             List<ResultadoRanking> ranking = rankingDAO.obtenerRanking(10000, ModoJuego.NORMAL);
             ResultadoRanking resultadoGuardado = ranking.stream()

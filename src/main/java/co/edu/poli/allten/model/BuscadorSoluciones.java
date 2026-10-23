@@ -8,161 +8,205 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * Busca soluciones para los objetivos usando los números disponibles.
- */
 public class BuscadorSoluciones {
 
-    /**
-     * Busca todas las expresiones posibles que permiten alcanzar
-     * el objetivo utilizando los cuatro números exactamente una vez.
-     */
-    public List<String> buscarSoluciones(List<Integer> numeros,int objetivo,ModoJuego modo) {
+    private static final double TOLERANCIA = 1e-9;
+    private static final int CANTIDAD_NUMEROS = 4;
+    private static final int NUMERO_MINIMO = 1;
+    private static final int NUMERO_MAXIMO = 9;
 
-        Objects.requireNonNull(numeros, "La lista de números no puede ser vacia.");
-        Objects.requireNonNull(modo, "El modo no puede estar vacio.");
+    private record Nodo(
+            double valor,
+            int numero,
+            char operador,
+            Nodo izquierda,
+            Nodo derecha,
+            int cantidadRaices,
+            boolean operacionAvanzadaNoTrivial) { }
 
-        // Por ahora solo se implementa el modo NORMAL.
-        if (modo != ModoJuego.NORMAL) {
-            throw new UnsupportedOperationException(
-                    "El modo " + modo + " todavía no está implementado.");
+    public List<String> buscarSoluciones(List<Integer> numeros, int objetivo, ModoJuego modo) {
+        validarEntrada(numeros, modo);
+        return filtrarSoluciones(construirTabla(numeros, modo), objetivo, modo);
+    }
+    private List<String> filtrarSoluciones(List<List<Nodo>> tabla, int objetivo, ModoJuego modo) {
+        Set<String> soluciones = new LinkedHashSet<>();
+        for (Nodo raiz : tabla.get((1 << CANTIDAD_NUMEROS) - 1)) {
+            if (Math.abs(raiz.valor() - objetivo) > TOLERANCIA
+                    || (modo == ModoJuego.HARDCORE && !raiz.operacionAvanzadaNoTrivial())) {
+                continue;
+            }
+            soluciones.add(formatear(raiz));
         }
+        return new ArrayList<>(soluciones);
+    }
 
-        final int cantidadNumeros = 4;
-        final int numeroMinimo = 1;
-        final int numeroMaximo = 9;
-        final double tolerancia = 1e-9;
-        // Orden: x+y, x-y, x*y, x/y y luego y-x, y/x (los dos últimos invierten operandos).
-        final String operadores = "+-*/-/";
+    private void validarEntrada(List<Integer> numeros, ModoJuego modo) {
+        Objects.requireNonNull(numeros, "La lista de números no puede estar vacía.");
+        Objects.requireNonNull(modo, "El modo no puede estar vacío.");
 
-        if (numeros.size() != cantidadNumeros) {
+        if (numeros.size() != CANTIDAD_NUMEROS) {
             throw new IllegalArgumentException(
-                    "Se requieren exactamente " + cantidadNumeros + " números.");
+                    "Se requieren exactamente " + CANTIDAD_NUMEROS + " números.");
         }
         for (Integer numero : numeros) {
-            if (numero == null || numero < numeroMinimo || numero > numeroMaximo) {
+            if (numero == null || numero < NUMERO_MINIMO || numero > NUMERO_MAXIMO) {
                 throw new IllegalArgumentException(
-                        "Cada número debe estar entre " + numeroMinimo + " y " + numeroMaximo + ".");
+                        "Cada número debe estar entre " + NUMERO_MINIMO + " y " + NUMERO_MAXIMO + ".");
             }
         }
+    }
 
-        // Árbol de la expresión: hoja (operador == '\0') u operación entre dos nodos.
-        // No guarda texto: la cadena solo se arma para las soluciones que coinciden.
-        record Nodo(double valor, int numero, char operador, Nodo izquierda, Nodo derecha) { }
-
-        // tabla.get(mascara) = todos los resultados posibles usando exactamente
-        // los números cuyos bits están encendidos en la máscara.
-        final int total = 1 << cantidadNumeros;
+    private List<List<Nodo>> construirTabla(List<Integer> numeros, ModoJuego modo) {
+        int total = 1 << CANTIDAD_NUMEROS;
         List<List<Nodo>> tabla = new ArrayList<>(total);
         for (int mascara = 0; mascara < total; mascara++) {
             tabla.add(new ArrayList<>());
         }
-        for (int i = 0; i < cantidadNumeros; i++) {
+        for (int i = 0; i < CANTIDAD_NUMEROS; i++) {
             int valor = numeros.get(i);
-            tabla.get(1 << i).add(new Nodo(valor, valor, '\0', null, null));
+            tabla.get(1 << i).add(new Nodo(valor, valor, '\0', null, null, 0, false));
         }
 
-        // Combina cada subconjunto con todas sus divisiones en dos partes.
         for (int mascara = 1; mascara < total; mascara++) {
             if (Integer.bitCount(mascara) < 2) {
                 continue;
             }
             List<Nodo> destino = tabla.get(mascara);
-
-            for (int parteA = (mascara - 1) & mascara; parteA > 0; parteA = (parteA - 1) & mascara) {
+            for (int parteA = (mascara - 1) & mascara;
+                    parteA > 0;
+                    parteA = (parteA - 1) & mascara) {
                 int parteB = mascara ^ parteA;
                 if (parteA < parteB) {
-                    continue; // cada división se procesa una sola vez
+                    continue;
                 }
                 for (Nodo x : tabla.get(parteA)) {
                     for (Nodo y : tabla.get(parteB)) {
-                        for (int k = 0; k < operadores.length(); k++) {
-                            char operador = operadores.charAt(k);
-                            Nodo izquierda = k >= 4 ? y : x;
-                            Nodo derecha = k >= 4 ? x : y;
+                        agregarOperacion(destino, x, y, '+', false);
+                        agregarOperacion(destino, x, y, '-', false);
+                        agregarOperacion(destino, y, x, '-', false);
+                        agregarOperacion(destino, x, y, '*', false);
+                        agregarOperacion(destino, x, y, '/', false);
+                        agregarOperacion(destino, y, x, '/', false);
+                        if (modo == ModoJuego.HARDCORE) {
+                            agregarOperacion(destino, x, y, '^', true);
+                            agregarOperacion(destino, y, x, '^', true);
+                        }
+                    }
+                }
+            }
 
-                            double valor = switch (operador) {
-                                case '+' -> izquierda.valor() + derecha.valor();
-                                case '-' -> izquierda.valor() - derecha.valor();
-                                case '*' -> izquierda.valor() * derecha.valor();
-                                default -> Math.abs(derecha.valor()) < tolerancia
-                                        ? Double.NaN
-                                        : izquierda.valor() / derecha.valor();
-                            };
-
-                            if (Double.isFinite(valor)) {
-                                destino.add(new Nodo(valor, 0, operador, izquierda, derecha));
-                            }
+            if (modo == ModoJuego.HARDCORE) {
+                List<Nodo> expresionesSinRaiz = new ArrayList<>(destino);
+                for (Nodo nodo : expresionesSinRaiz) {
+                    if (nodo.cantidadRaices() == 0 && nodo.valor() >= 0) {
+                        double valor = Math.sqrt(nodo.valor());
+                        if (Double.isFinite(valor)) {
+                            destino.add(new Nodo(
+                                    valor,
+                                    0,
+                                    '√',
+                                    nodo,
+                                    null,
+                                    1,
+                                    nodo.operacionAvanzadaNoTrivial() || nodo.valor() > 1));
                         }
                     }
                 }
             }
         }
+        return tabla;
+    }
 
-        // Solo se construye el texto de las expresiones que alcanzan el objetivo.
-        Set<String> soluciones = new LinkedHashSet<>();
-        for (Nodo raiz : tabla.get(total - 1)) {
-            if (Math.abs(raiz.valor() - objetivo) >= tolerancia) {
+    private void agregarOperacion(
+            List<Nodo> destino,
+            Nodo izquierda,
+            Nodo derecha,
+            char operador,
+            boolean avanzada) {
+        int cantidadRaices = izquierda.cantidadRaices() + derecha.cantidadRaices();
+        if (cantidadRaices > 1) {
+            return;
+        }
+
+        double valor = switch (operador) {
+            case '+' -> izquierda.valor() + derecha.valor();
+            case '-' -> izquierda.valor() - derecha.valor();
+            case '*' -> izquierda.valor() * derecha.valor();
+            case '/' -> Math.abs(derecha.valor()) < TOLERANCIA
+                    ? Double.NaN
+                    : izquierda.valor() / derecha.valor();
+            case '^' -> Math.pow(izquierda.valor(), derecha.valor());
+            default -> throw new IllegalArgumentException("Operador no reconocido: " + operador);
+        };
+
+        if (!Double.isFinite(valor)) {
+            return;
+        }
+        boolean potenciaNoTrivial = avanzada
+                && derecha.valor() != 0
+                && derecha.valor() != 1;
+        destino.add(new Nodo(
+                valor,
+                0,
+                operador,
+                izquierda,
+                derecha,
+                cantidadRaices,
+                izquierda.operacionAvanzadaNoTrivial()
+                        || derecha.operacionAvanzadaNoTrivial()
+                        || potenciaNoTrivial));
+    }
+
+    private String formatear(Nodo raiz) {
+        StringBuilder expresion = new StringBuilder();
+        Deque<Object> pila = new ArrayDeque<>();
+        pila.push(raiz);
+        while (!pila.isEmpty()) {
+            Object elemento = pila.pop();
+            if (elemento instanceof String texto) {
+                expresion.append(texto);
                 continue;
             }
 
-            StringBuilder expresion = new StringBuilder();
-            Deque<Object> pila = new ArrayDeque<>();
-            pila.push(raiz);
-
-            while (!pila.isEmpty()) {
-                Object elemento = pila.pop();
-                if (elemento instanceof String texto) {
-                    expresion.append(texto);
-                } else {
-                    Nodo nodo = (Nodo) elemento;
-                    if (nodo.operador() == '\0') {
-                        expresion.append(nodo.numero());
-                    } else {
-                        pila.push(")");
-                        pila.push(nodo.derecha());
-                        pila.push(" " + nodo.operador() + " ");
-                        pila.push(nodo.izquierda());
-                        pila.push("(");
-                    }
-                }
+            Nodo nodo = (Nodo) elemento;
+            if (nodo.operador() == '\0') {
+                expresion.append(nodo.numero());
+            } else if (nodo.operador() == '√') {
+                pila.push(")");
+                pila.push(nodo.izquierda());
+                pila.push("√(");
+            } else {
+                pila.push(")");
+                pila.push(nodo.derecha());
+                pila.push(" " + nodo.operador() + " ");
+                pila.push(nodo.izquierda());
+                pila.push("(");
             }
-
-            // Se quitan los paréntesis externos redundantes.
-            soluciones.add(expresion.substring(1, expresion.length() - 1));
         }
-
-        return new ArrayList<>(soluciones);
+        return expresion.toString();
     }
 
-    /**
-     * Verifica si existe al menos una solución para un objetivo.
-     */
-    public boolean existeSolucion(
-            List<Integer> numeros,
-            int objetivo,
-            ModoJuego modo) {
-
+    public boolean existeSolucion(List<Integer> numeros, int objetivo, ModoJuego modo) {
         return !buscarSoluciones(numeros, objetivo, modo).isEmpty();
     }
 
-    /**
-     * Verifica si los números permiten resolver todos los objetivos
-     * del 1 al 10.
-     */
-    public boolean tieneSolucionTodosLosObjetivos(
-            List<Integer> numeros,
-            ModoJuego modo) {
-
-        final int objetivoMinimo = 1;
-        final int objetivoMaximo = 10;
-
-        for (int objetivo = objetivoMinimo; objetivo <= objetivoMaximo; objetivo++) {
-            if (!existeSolucion(numeros, objetivo, modo)) {
+    // Revisa uno por uno los objetivos del juego y se detiene al encontrar uno irresoluble.
+    public boolean tieneSolucionTodosLosObjetivos(List<Integer> numeros, ModoJuego modo) {
+        validarEntrada(numeros, modo);
+        List<List<Nodo>> tabla = construirTabla(numeros, modo);
+        for (int objetivo = 1; objetivo <= 10; objetivo++) {
+            boolean encontrado = false;
+            for (Nodo raiz : tabla.get((1 << CANTIDAD_NUMEROS) - 1)) {
+                if (Math.abs(raiz.valor() - objetivo) <= TOLERANCIA
+                        && (modo == ModoJuego.NORMAL || raiz.operacionAvanzadaNoTrivial())) {
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
                 return false;
             }
         }
-
         return true;
     }
 }

@@ -44,6 +44,23 @@ El teclado del juego muestra los operadores con sus símbolos visuales. Si el ju
 
 La expresión se puede confirmar presionando el botón `=` o la tecla **Enter**.
 
+## Modo Hardcore
+
+El modo Hardcore conserva las reglas principales de la partida: cuatro números del 1 al 9, los objetivos del 1 al 10 y el uso de cada número exactamente una vez por expresión. También mantiene el cronómetro y los intentos ilimitados.
+
+Además de las operaciones básicas y los paréntesis, permite:
+
+- potencia (`^`);
+- raíz cuadrada (`√`), aplicada únicamente a valores no negativos y como máximo una vez por expresión.
+
+Cada expresión debe incluir al menos una operación avanzada **no trivial**: una potencia cuyo exponente no sea 0 ni 1, o una raíz cuadrada cuyo radicando sea mayor que 1. Así, expresiones como `3^1` o `√1` no cumplen el requisito.
+
+Se permiten resultados intermedios fraccionarios y negativos. La expresión debe ser matemáticamente válida, producir un resultado real y finito, no dividir entre cero y resolver exactamente un objetivo pendiente.
+
+Antes de iniciar una partida Hardcore, la combinación de números debe comprobarse con estas mismas reglas y permitir resolver los diez objetivos. El ranking Hardcore se mantiene separado del ranking Normal.
+
+El modo Hardcore se puede seleccionar e iniciar desde la interfaz del juego.
+
 ## Resultados intermedios
 
 Se permiten resultados intermedios fraccionarios y negativos, siempre que el resultado final sea exactamente uno de los objetivos del 1 al 10.
@@ -66,6 +83,10 @@ Si la expresión utiliza números incorrectos o repite una copia que ya no está
 Si la expresión tiene una operación o estructura inválida, se muestra un mensaje de operación matemática no válida.
 
 Si la expresión es válida, pero produce un resultado que no corresponde a una solución pendiente, se muestra el resultado obtenido. Por ejemplo: **El resultado 12 no hace parte de las soluciones.**
+
+## Pistas
+
+Al consultar una pista, el juego muestra una expresión válida para el objetivo seleccionado, generada con los números de la partida y las reglas del modo activo. La expresión se puede copiar desde el diálogo y pegar en el campo de entrada con `Ctrl+V`. En Hardcore, la pista incluye una potencia o raíz cuadrada no trivial y respeta el límite de una raíz por expresión.
 
 ## Progreso y finalización
 

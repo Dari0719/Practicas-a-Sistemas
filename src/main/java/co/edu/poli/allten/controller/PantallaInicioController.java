@@ -6,6 +6,7 @@ import co.edu.poli.allten.model.Jugador;
 import co.edu.poli.allten.model.ModoJuego;
 import co.edu.poli.allten.model.SesionJuego;
 import co.edu.poli.allten.view.App;
+import co.edu.poli.allten.view.GestorTema;
 import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
@@ -39,6 +40,11 @@ public class PantallaInicioController {
     private ScaleTransition hardcoreTransition;
     private ScaleTransition startTransition;
     private ModoJuego modoSeleccionado = ModoJuego.NORMAL;
+
+    @FXML
+    private void alternarTema() {
+        GestorTema.alternar();
+    }
 
     @FXML
     private void initialize() {

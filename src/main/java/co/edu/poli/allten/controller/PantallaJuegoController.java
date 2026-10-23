@@ -11,11 +11,12 @@ import co.edu.poli.allten.database.JugadorDAO;
 import co.edu.poli.allten.database.SesionJuegoDAO;
 import co.edu.poli.allten.model.BuscadorSoluciones;
 import co.edu.poli.allten.model.ModoJuego;
-import co.edu.poli.allten.model.Ronda;
 import co.edu.poli.allten.model.ResultadoValidacion;
+import co.edu.poli.allten.model.Ronda;
 import co.edu.poli.allten.model.SesionJuego;
 import co.edu.poli.allten.model.ValidadorExpresion;
 import co.edu.poli.allten.view.App;
+import co.edu.poli.allten.view.GestorTema;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -35,8 +36,8 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -94,6 +95,11 @@ public class PantallaJuegoController {
     private PauseTransition pausaResaltadoEntrada;
     private Timeline cronometro;
     private boolean animacionEntradaPendiente;
+
+    @FXML
+    private void alternarTema() {
+        GestorTema.alternar();
+    }
 
     @FXML
     private void initialize() {

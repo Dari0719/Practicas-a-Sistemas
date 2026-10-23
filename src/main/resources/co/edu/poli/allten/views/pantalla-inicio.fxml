@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="600.0" spacing="25.0" styleClass="root" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.allten.controller.PantallaInicioController">
+   <padding>
+      <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+   </padding>
+
+   <StackPane maxWidth="1.7976931348623157E308" prefHeight="52.0">
+      <Label styleClass="title-label" text="Allten" />
+      <Button fx:id="rankingButton" mnemonicParsing="false" onAction="#consultarRanking"
+              accessibleText="Consultar ranking" styleClass="ranking-home-button"
+              text="Ranking" StackPane.alignment="CENTER_RIGHT" />
+   </StackPane>
+
+   <VBox spacing="8.0">
+      <Label styleClass="field-label" text="NICKNAME" />
+      <TextField fx:id="campoApodo" promptText="Escribe tu nickname" styleClass="text-field" />
+   </VBox>
+
+   <VBox spacing="8.0">
+      <Label styleClass="field-label" text="MODO DE JUEGO" />
+      <HBox spacing="15.0">
+         <children>
+            <Button fx:id="normalButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seleccionarNormal" styleClass="game-mode-button-active" text="Normal" HBox.hgrow="ALWAYS" />
+            <Button fx:id="hardcoreButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seleccionarHardcore" styleClass="game-mode-button" text="Hardcore" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </VBox>
+
+   <Button fx:id="startButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#iniciarPartida" styleClass="primary-button" text="Iniciar Nueva Partida" />
+</VBox>

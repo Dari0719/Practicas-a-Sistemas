@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="900.0" spacing="18.0"
+      styleClass="root" stylesheets="@../styles/pantalla-ranking.css"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.poli.allten.controller.PantallaRankingController">
+   <padding>
+      <Insets bottom="24.0" left="32.0" right="32.0" top="24.0" />
+   </padding>
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="12.0">
+         <Label styleClass="app-title" text="Allten" />
+         <Region HBox.hgrow="ALWAYS" />
+         <Label fx:id="modoLabel" styleClass="mode-badge" text="Modo NORMAL" />
+      </HBox>
+      <VBox spacing="5.0">
+         <Label styleClass="screen-title" text="Ranking de partidas" />
+         <Label styleClass="screen-subtitle"
+                text="Las mejores partidas completadas, ordenadas por tiempo y luego por intentos." />
+      </VBox>
+      <VBox VBox.vgrow="ALWAYS" spacing="10.0" styleClass="ranking-card">
+         <padding>
+            <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+         </padding>
+         <TableView fx:id="tablaRanking" VBox.vgrow="ALWAYS">
+            <columns>
+               <TableColumn fx:id="apodoColumn" prefWidth="220.0" text="JUGADOR" />
+               <TableColumn fx:id="tiempoColumn" prefWidth="130.0" text="TIEMPO" />
+               <TableColumn fx:id="intentosColumn" prefWidth="130.0" text="INTENTOS" />
+               <TableColumn fx:id="fechaColumn" prefWidth="220.0" text="FECHA" />
+            </columns>
+         </TableView>
+         <Label fx:id="estadoRankingLabel" styleClass="empty-message"
+                text="Aún no hay partidas completadas en este modo." />
+      </VBox>
+      <HBox alignment="CENTER" spacing="12.0">
+         <Button onAction="#volverAlResumen" styleClass="secondary-button"
+                 text="←  Volver" />
+         <Button onAction="#actualizarRanking" styleClass="secondary-button"
+                 text="⟳  Actualizar" />
+      </HBox>
+   </children>
+</VBox>

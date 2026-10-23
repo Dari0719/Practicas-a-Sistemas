@@ -1,0 +1,164 @@
+.root {
+    -fx-background-color: #1a1b26;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.icon-button:hover {
+    -fx-text-fill: #7b5cff;
+}
+
+.timer-badge {
+    -fx-background-color: #232433;
+    -fx-background-radius: 8px;
+    -fx-border-color: #7b5cff;
+    -fx-border-radius: 8px;
+    -fx-padding: 5px 9px;
+}
+
+.timer-icon,
+.timer-label {
+    -fx-text-fill: #d8d0ff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.mode-badge {
+    -fx-background-color: #7b5cff;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 6px 12px;
+}
+
+.exit-button {
+    -fx-background-color: #232433;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #2f3147;
+    -fx-padding: 6px 14px;
+    -fx-cursor: hand;
+}
+
+.exit-button:hover {
+    -fx-background-color: #2e3046;
+}
+
+.number-button,
+.op-symbol-button,
+.action-control-button {
+    -fx-background-color: #232433;
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #2f3147;
+    -fx-border-width: 1.5px;
+    -fx-cursor: hand;
+}
+
+.number-button,
+.op-symbol-button {
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.number-button:hover,
+.op-symbol-button:hover,
+.action-control-button:hover {
+    -fx-background-color: #2d2f44;
+}
+
+.number-button-selected {
+    -fx-background-color: #34305a;
+    -fx-border-color: #7b5cff;
+    -fx-border-width: 2px;
+}
+
+.number-button-solved {
+    -fx-background-color: #246b50;
+    -fx-border-color: #55d69e;
+    -fx-text-fill: #eafff4;
+}
+
+.number-button-solved:hover {
+    -fx-background-color: #2b805f;
+}
+
+.button-pressed-flash {
+    -fx-background-color: #51458a;
+    -fx-border-color: #a894ff;
+    -fx-text-fill: #ffffff;
+}
+
+.primary-equals-button.button-pressed-flash {
+    -fx-background-color: #51458a;
+}
+
+.dynamic-number-button {
+    -fx-background-color: #7b5cff;
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.dynamic-number-button:hover {
+    -fx-background-color: #6a4de5;
+}
+
+.dynamic-number-button:disabled {
+    -fx-background-color: #3a3654;
+    -fx-text-fill: #a7a2bd;
+    -fx-opacity: 1;
+    -fx-cursor: default;
+}
+
+.action-control-button {
+    -fx-font-size: 16px;
+}
+
+.primary-equals-button {
+    -fx-background-color: linear-gradient(to right, #7b5cff, #9d67ff);
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 8px;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.primary-equals-button:hover {
+    -fx-background-color: #6a4de5;
+}
+
+.expression-text-field {
+    -fx-background-color: #232433;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #8b8fa3;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #2f3147;
+    -fx-border-width: 1.5px;
+    -fx-padding: 12px 16px;
+    -fx-font-size: 14px;
+}
+
+.expression-text-field:focused {
+    -fx-border-color: #7b5cff;
+}
+
+.expression-input-flash {
+    -fx-border-color: #a894ff;
+    -fx-background-color: #29263f;
+}

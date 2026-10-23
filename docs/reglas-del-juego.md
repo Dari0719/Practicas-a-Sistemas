@@ -1,63 +1,137 @@
 # Reglas del juego
 
-## Números disponibles
+## Inicio de la partida
 
-Cada reto proporciona cuatro números.
-![Números disponibles del reto](image.png)
+El jugador escribe un nickname y comienza la partida con el botón **Iniciar Partida** o presionando **Enter**.
+
+Al comenzar, el sistema genera cuatro números enteros aleatorios entre 1 y 9. Los números pueden repetirse. El mismo conjunto de cuatro números se mantiene durante toda la partida.
+
+## Garantía de solubilidad
+
+El sistema no acepta cualquier combinación aleatoria. Antes de iniciar la partida, aplica una búsqueda exhaustiva por fuerza bruta sobre las operaciones y agrupaciones posibles.
+
+La combinación solo se utiliza si permite obtener todos los objetivos del 1 al 10. Si una combinación no permite resolver los diez objetivos, se descarta y se genera otra.
+
+Por lo tanto, toda partida iniciada debe tener solución para los diez objetivos.
 
 ## Objetivos
 
-El jugador debe conseguir los resultados correspondientes a los objetivos del 1 al 10.
-![Objetivos del reto](image-1.png)
+La partida contiene diez objetivos: los números enteros del 1 al 10.
+
+Los objetivos pueden resolverse en cualquier orden. El jugador puede comenzar por el 1, el 7, el 10 o cualquier otro objetivo pendiente. No existe una secuencia obligatoria.
+
+Una expresión correcta se asigna automáticamente al objetivo cuyo resultado produce. No es obligatorio seleccionar primero la fila del objetivo.
 
 ## Uso de los números
 
-Los cuatro números disponibles deben utilizarse exactamente una vez para construir cada solución.
-![Uso de los numeros](image-3.png)
+Cada expresión debe utilizar los cuatro números generados para la partida, exactamente una vez cada uno.
 
-## Fracciones
+Los números no se consumen entre objetivos. El mismo conjunto de cuatro números puede reutilizarse para resolver los diez objetivos.
 
-Se permite utilizar fracciones en las expresiones matemáticas.
-![Uso de Fracciones](image-5.png)
+Los botones de números se deshabilitan individualmente cuando el número correspondiente ya fue usado en la expresión actual. Si existen números repetidos, se pueden utilizar tantas copias como hayan sido generadas. Al borrar o reiniciar la expresión, los botones vuelven a habilitarse.
 
-## Números negativos
+## Operaciones permitidas
 
-Se permite utilizar números negativos en las expresiones.
-![Numeros negativos](image-6.png)
+Se permiten:
 
-## Números de varios dígitos
+- suma (`+`);
+- resta (`-` o `−`);
+- multiplicación (`*` o `×`);
+- división (`/` o `÷`);
+- paréntesis.
 
-Se permite formar números utilizando más de un dígito.
-![Numeros Varios Digitos](image-7.png)
-    
-## Operaciones matemáticas
+El teclado del juego muestra los operadores con sus símbolos visuales. Si el jugador escribe `*` o `/` en el teclado, la aplicación los muestra como `×` y `÷`.
 
-Las operaciones permitidas serán definidas y aprobadas por el equipo.
-![Expresiones Matematicas](image-2.png)
+La expresión se puede confirmar presionando el botón `=` o la tecla **Enter**.
 
-## Respuesta correcta
+## Modo Hardcore
 
-Una respuesta es correcta cuando la expresión utiliza correctamente los números disponibles y produce exactamente el objetivo solicitado. 
-![Respuesta correcta de un numero](image-4.png)
+El modo Hardcore conserva las reglas principales de la partida: cuatro números del 1 al 9, los objetivos del 1 al 10 y el uso de cada número exactamente una vez por expresión. También mantiene el cronómetro y los intentos ilimitados.
 
-## Objetivo completado
+Además de las operaciones básicas y los paréntesis, permite:
 
-Un objetivo se considera completado cuando el jugador proporciona una expresión válida que produce exactamente dicho objetivo.
+- potencia (`^`);
+- raíz cuadrada (`√`), aplicada únicamente a valores no negativos y como máximo una vez por expresión.
 
-## Finalizacion de la partida
+Cada expresión debe incluir al menos una operación avanzada **no trivial**: una potencia cuyo exponente no sea 0 ni 1, o una raíz cuadrada cuyo radicando sea mayor que 1. Así, expresiones como `3^1` o `√1` no cumplen el requisito.
 
-La partida comienza cuando el jugador inicia el reto y termina cuando completa correctamente los diez objetivos, del 1 al 10.
+Se permiten resultados intermedios fraccionarios y negativos. La expresión debe ser matemáticamente válida, producir un resultado real y finito, no dividir entre cero y resolver exactamente un objetivo pendiente.
 
-Al finalizar, la aplicacion mostrara un recuadro con el tiempo total empleado por el jugador.
+Antes de iniciar una partida Hardcore, la combinación de números debe comprobarse con estas mismas reglas y permitir resolver los diez objetivos. El ranking Hardcore se mantiene separado del ranking Normal.
 
-## Criterio de victoria
+El modo Hardcore se puede seleccionar e iniciar desde la interfaz del juego.
 
-El resultado principal de la partida sera el tiempo. En una tabla de clasificacion, el mejor resultado de cada jugador sera su menor tiempo registrado en una partida completada.
+## Resultados intermedios
 
-Si dos jugadores tienen el mismo tiempo, se desempata usando el menor numero de intentos. Si el empate continua, se conserva el primer resultado registrado.
+Se permiten resultados intermedios fraccionarios y negativos, siempre que el resultado final sea exactamente uno de los objetivos del 1 al 10.
 
-Las partidas abandonadas o incompletas no se tendran en cuenta para la tabla de mejores tiempos.
+No se permite dividir entre cero ni utilizar operadores o paréntesis con sintaxis inválida.
 
-## Aprobación
+## Validación de respuestas
 
-Las reglas fueron revisadas y aprobadas por los integrantes del equipo.
+Una expresión es correcta cuando:
+
+- utiliza únicamente los cuatro números generados;
+- usa cada número exactamente una vez;
+- utiliza solo operaciones permitidas;
+- tiene una sintaxis matemática válida;
+- no divide entre cero; y
+- produce exactamente uno de los objetivos pendientes.
+
+Si la expresión utiliza números incorrectos o repite una copia que ya no está disponible, se muestra un mensaje indicando que deben usarse los cuatro números disponibles exactamente una vez.
+
+Si la expresión tiene una operación o estructura inválida, se muestra un mensaje de operación matemática no válida.
+
+Si la expresión es válida, pero produce un resultado que no corresponde a una solución pendiente, se muestra el resultado obtenido. Por ejemplo: **El resultado 12 no hace parte de las soluciones.**
+
+## Pistas
+
+Al consultar una pista, el juego muestra una expresión válida para el objetivo seleccionado, generada con los números de la partida y las reglas del modo activo. La expresión se puede copiar desde el diálogo y pegar en el campo de entrada con `Ctrl+V`. En Hardcore, la pista incluye una potencia o raíz cuadrada no trivial y respeta el límite de una raíz por expresión.
+
+## Progreso y finalización
+
+Cada objetivo resuelto se marca visualmente en verde y conserva la expresión utilizada. El orden visual de las soluciones representa el orden en que el jugador las completó.
+
+La partida termina cuando los diez objetivos están resueltos, sin importar el orden.
+
+Al finalizar, se muestra una pantalla de resumen dentro de la aplicación con el tiempo total empleado.
+
+## Tiempo y ranking
+
+El cronómetro comienza al iniciar la partida y se detiene al resolver el décimo objetivo.
+
+El ranking se ordena por el menor tiempo total. Si dos jugadores tienen el mismo tiempo, se desempata con el menor número de intentos. Las partidas abandonadas o incompletas no se incluyen.
+
+Desde el resumen de la partida, el jugador puede consultar el ranking o volver a la pantalla de inicio.
+
+## Arquitectura y recursos
+
+La aplicación sigue el patrón MVC:
+
+- el modelo administra las reglas, la sesión, los objetivos, la validación, el tiempo y el ranking;
+- el controlador conecta las acciones de la vista con el modelo;
+- la vista carga FXML, aplica CSS y muestra el estado al jugador.
+
+Las pantallas están separadas en recursos:
+
+- `game-home.fxml` y `game-home.css` para el inicio;
+- `game.fxml` y `game.css` para la partida;
+- `game-summary.fxml` para el resumen final.
+
+## Ejemplos visuales de las reglas
+
+![Números disponibles del reto](image.png)
+
+![Objetivos del reto](image-1.png)
+
+![Uso de los números](image-3.png)
+
+![Uso de fracciones](image-5.png)
+
+![Números negativos](image-6.png)
+
+![Números de varios dígitos](image-7.png)
+
+![Expresiones matemáticas](image-2.png)
+
+![Respuesta correcta de un número](image-4.png)

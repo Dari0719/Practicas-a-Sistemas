@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefWidth="520.0" spacing="14.0" styleClass="root" stylesheets="@../styles/ventanas-ayuda.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.allten.controller.VentanaPistaController">
+   <padding>
+      <Insets bottom="22.0" left="26.0" right="26.0" top="22.0" />
+   </padding>
+
+   <!-- Encabezado -->
+   <HBox alignment="CENTER_LEFT" spacing="12.0">
+      <Label styleClass="icono-ventana" text="💡" />
+      <VBox spacing="2.0">
+         <Label styleClass="ventana-titulo" text="Pista" />
+         <Label styleClass="ventana-subtitulo" text="Una ayuda para el objetivo elegido" />
+      </VBox>
+      <Region HBox.hgrow="ALWAYS" />
+      <Label fx:id="objetivoLabel" styleClass="modo-chip" text="Objetivo 1" />
+   </HBox>
+
+   <!-- Contenido de la pista -->
+   <VBox fx:id="seccionPista" spacing="14.0">
+      <VBox spacing="10.0" styleClass="tarjeta">
+         <Label styleClass="etiqueta" text="TUS NÚMEROS" />
+         <HBox fx:id="numerosBox" alignment="CENTER_LEFT" spacing="10.0" />
+      </VBox>
+
+      <VBox spacing="10.0" styleClass="tarjeta">
+         <HBox alignment="CENTER_LEFT">
+            <Label styleClass="etiqueta" text="UNA FORMA DE LOGRARLO" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="contadorLabel" styleClass="contador" text="" />
+         </HBox>
+         <ScrollPane fx:id="solucionesScroll" fitToWidth="true" hbarPolicy="NEVER" prefHeight="210.0" styleClass="scroll-ayuda">
+            <content>
+               <VBox fx:id="solucionesBox" spacing="8.0">
+                  <padding>
+                     <Insets right="6.0" />
+                  </padding>
+               </VBox>
+            </content>
+         </ScrollPane>
+         <Button fx:id="otraFormaButton" maxWidth="Infinity" mnemonicParsing="false" onAction="#mostrarOtraForma" styleClass="boton-secundario" text="Mostrar otra forma" />
+      </VBox>
+
+      <Label fx:id="notaHardcoreLabel" managed="false" styleClass="nota-hardcore" text="La pista respeta las reglas Hardcore e incluye una operación avanzada no trivial." visible="false" wrapText="true" />
+   </VBox>
+
+   <!-- Mensaje de estado (objetivo resuelto, sin solución o error) -->
+   <VBox fx:id="seccionEstado" alignment="CENTER" managed="false" spacing="10.0" styleClass="tarjeta" visible="false">
+      <Label fx:id="estadoIconoLabel" styleClass="estado-icono" text="✓" />
+      <Label fx:id="estadoTituloLabel" styleClass="estado-titulo" text="" />
+      <Label fx:id="estadoMensajeLabel" styleClass="regla-texto" text="" textAlignment="CENTER" wrapText="true" />
+   </VBox>
+
+   <Button fx:id="cerrarButton" defaultButton="true" maxWidth="Infinity" mnemonicParsing="false" onAction="#cerrar" styleClass="boton-primario" text="Cerrar" />
+</VBox>

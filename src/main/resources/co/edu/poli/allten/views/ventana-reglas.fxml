@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="640.0" prefWidth="560.0" spacing="14.0" styleClass="root" stylesheets="@../styles/ventanas-ayuda.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.allten.controller.VentanaReglasController">
+   <padding>
+      <Insets bottom="22.0" left="26.0" right="26.0" top="22.0" />
+   </padding>
+
+   <!-- Encabezado -->
+   <HBox alignment="CENTER_LEFT" spacing="12.0">
+      <Label styleClass="icono-ventana" text="?" />
+      <VBox spacing="2.0">
+         <Label styleClass="ventana-titulo" text="Reglas del juego" />
+         <Label styleClass="ventana-subtitulo" text="Todo lo que necesitas para jugar" />
+      </VBox>
+      <Region HBox.hgrow="ALWAYS" />
+      <Label fx:id="modoLabel" styleClass="modo-chip" text="NORMAL" />
+   </HBox>
+
+   <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-ayuda" VBox.vgrow="ALWAYS">
+      <content>
+         <VBox spacing="12.0">
+            <padding>
+               <Insets right="6.0" />
+            </padding>
+
+            <!-- 1. Objetivo -->
+            <VBox spacing="10.0" styleClass="tarjeta">
+               <HBox alignment="CENTER_LEFT" spacing="10.0">
+                  <Label styleClass="seccion-numero" text="1" />
+                  <Label styleClass="seccion-titulo" text="El objetivo" />
+               </HBox>
+               <Label styleClass="regla-texto" text="Resuelve los objetivos del 1 al 10, en cualquier orden. Cada objetivo se logra con una expresión cuyo resultado sea ese número." wrapText="true" />
+            </VBox>
+
+            <!-- 2. Cómo se juega -->
+            <VBox spacing="9.0" styleClass="tarjeta">
+               <HBox alignment="CENTER_LEFT" spacing="10.0">
+                  <Label styleClass="seccion-numero" text="2" />
+                  <Label styleClass="seccion-titulo" text="Cómo se juega" />
+               </HBox>
+               <HBox spacing="10.0">
+                  <Label styleClass="paso-numero" text="1" />
+                  <Label maxWidth="Infinity" styleClass="regla-texto" text="Usa los cuatro números generados, exactamente una vez cada uno." wrapText="true" HBox.hgrow="ALWAYS" />
+               </HBox>
+               <HBox spacing="10.0">
+                  <Label styleClass="paso-numero" text="2" />
+                  <Label maxWidth="Infinity" styleClass="regla-texto" text="Combínalos con las operaciones permitidas para armar una expresión." wrapText="true" HBox.hgrow="ALWAYS" />
+               </HBox>
+               <HBox spacing="10.0">
+                  <Label styleClass="paso-numero" text="3" />
+                  <Label maxWidth="Infinity" styleClass="regla-texto" text="Pulsa = (o Enter) para validarla: su resultado debe ser un objetivo pendiente." wrapText="true" HBox.hgrow="ALWAYS" />
+               </HBox>
+               <HBox spacing="10.0">
+                  <Label styleClass="paso-numero" text="4" />
+                  <Label maxWidth="Infinity" styleClass="regla-texto" text="Puedes reutilizar el mismo conjunto de números en cada objetivo." wrapText="true" HBox.hgrow="ALWAYS" />
+               </HBox>
+            </VBox>
+
+            <!-- 3. Operaciones -->
+            <VBox spacing="10.0" styleClass="tarjeta">
+               <HBox alignment="CENTER_LEFT" spacing="10.0">
+                  <Label styleClass="seccion-numero" text="3" />
+                  <Label styleClass="seccion-titulo" text="Operaciones permitidas" />
+               </HBox>
+               <FlowPane hgap="8.0" vgap="8.0">
+                  <Label styleClass="chip-operador" text="+   Suma" />
+                  <Label styleClass="chip-operador" text="-   Resta" />
+                  <Label styleClass="chip-operador" text="×   Multiplicación" />
+                  <Label styleClass="chip-operador" text="÷   División" />
+                  <Label styleClass="chip-operador" text="( )   Paréntesis" />
+               </FlowPane>
+               <VBox fx:id="operadoresAvanzadosBox" managed="false" spacing="6.0" visible="false">
+                  <Label styleClass="etiqueta-hardcore" text="SOLO EN HARDCORE" />
+                  <FlowPane hgap="8.0" vgap="8.0">
+                     <Label styleClass="chip-avanzado" text="^   Potencia" />
+                     <Label styleClass="chip-avanzado" text="√   Raíz cuadrada" />
+                  </FlowPane>
+               </VBox>
+            </VBox>
+
+            <!-- 4. Reglas importantes -->
+            <VBox spacing="9.0" styleClass="tarjeta">
+               <HBox alignment="CENTER_LEFT" spacing="10.0">
+                  <Label styleClass="seccion-numero" text="4" />
+                  <Label styleClass="seccion-titulo" text="Reglas importantes" />
+               </HBox>
+               <HBox spacing="10.0">
+                  <Label styleClass="punto" text="•" />
+                  <Label maxWidth="Infinity" styleClass="regla-texto" text="No se permite dividir entre cero." wrapText="true" HBox.hgrow="ALWAYS" />
+               </HBox>
+               <HBox spacing="10.0">
+                  <Label styleClass="punto" text="•" />
+                  <Label maxWidth="Infinity" styleClass="regla-texto" text="El resultado de tu expresión debe ser un objetivo que aún esté pendiente." wrapText="true" HBox.hgrow="ALWAYS" />
+               </HBox>
+               <HBox spacing="10.0">
+                  <Label styleClass="punto" text="•" />
+                  <Label maxWidth="Infinity" styleClass="regla-texto" text="Cada número generado se usa exactamente una vez: no puedes repetirlo ni omitirlo." wrapText="true" HBox.hgrow="ALWAYS" />
+               </HBox>
+               <VBox fx:id="reglasHardcoreBox" managed="false" spacing="9.0" visible="false">
+                  <Label styleClass="etiqueta-hardcore" text="SOLO EN HARDCORE" />
+                  <HBox spacing="10.0">
+                     <Label styleClass="punto" text="•" />
+                     <Label maxWidth="Infinity" styleClass="regla-texto" text="La raíz cuadrada (√) se puede usar como máximo una vez por expresión." wrapText="true" HBox.hgrow="ALWAYS" />
+                  </HBox>
+                  <HBox spacing="10.0">
+                     <Label styleClass="punto" text="•" />
+                     <Label maxWidth="Infinity" styleClass="regla-texto" text="Cada respuesta debe incluir una operación avanzada no trivial: una potencia con exponente distinto de 0 y 1, o una raíz de un número mayor que 1." wrapText="true" HBox.hgrow="ALWAYS" />
+                  </HBox>
+               </VBox>
+            </VBox>
+         </VBox>
+      </content>
+   </ScrollPane>
+
+   <Button fx:id="cerrarButton" defaultButton="true" maxWidth="Infinity" mnemonicParsing="false" onAction="#cerrar" styleClass="boton-primario" text="Entendido" />
+</VBox>

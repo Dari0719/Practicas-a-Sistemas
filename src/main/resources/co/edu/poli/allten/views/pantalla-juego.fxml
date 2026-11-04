@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -23,6 +24,11 @@
             <Label fx:id="cronometroLabel" styleClass="timer-label" text="00:00" />
          </HBox>
          <HBox HBox.hgrow="ALWAYS" />
+         <Button mnemonicParsing="false" onAction="#alternarTema" accessibleText="Cambiar entre tema claro y oscuro" styleClass="icon-button" text="◐">
+            <tooltip>
+               <Tooltip text="Cambiar tema claro/oscuro" />
+            </tooltip>
+         </Button>
          <Button fx:id="modeBadge" mnemonicParsing="false" styleClass="mode-badge" text="NORMAL" />
          <Button mnemonicParsing="false" onAction="#volverAlInicio" styleClass="exit-button" text="Salir" />
       </children>

@@ -1,0 +1,316 @@
+/* ==========================================================================
+   Allten - tema claro
+   Solo cambia colores. Todas las reglas llevan el prefijo .tema-claro (clase que
+   GestorTema pone en la raíz de la pantalla), así ganan a las hojas oscuras de
+   cada pantalla sin tocarlas.
+
+   Paleta
+     fondo      #F4F3FB      superficie  #FFFFFF     borde   #D9D6EA
+     texto      #1E1B3A      secundario  #5B5877     acento  #7B5CFF
+   ========================================================================== */
+
+/* ---------- Fondo de cada pantalla ---------- */
+.root.tema-claro {
+    -fx-background-color: #F4F3FB;
+}
+
+/* ---------- Títulos y textos ---------- */
+.tema-claro .app-title,
+.tema-claro .title-label {
+    -fx-text-fill: #1E1B3A;
+}
+
+.tema-claro .screen-title,
+.tema-claro .completion-title,
+.tema-claro .player-name {
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .field-label,
+.tema-claro .screen-subtitle,
+.tema-claro .empty-message,
+.tema-claro .completion-subtitle,
+.tema-claro .detail-caption,
+.tema-claro .time-caption {
+    -fx-text-fill: #5B5877;
+}
+
+.tema-claro .time-description,
+.tema-claro .footer-note {
+    -fx-text-fill: #6B6885;
+}
+
+.tema-claro .elapsed-time {
+    -fx-text-fill: #3F2FA8;
+}
+
+.tema-claro .success-icon {
+    -fx-background-color: #EDE8FF;
+    -fx-text-fill: #5B3FD9;
+}
+
+/* ---------- Separadores ---------- */
+.tema-claro .header-separator,
+.tema-claro .card-separator {
+    -fx-opacity: 1;
+}
+
+.tema-claro .separator:horizontal .line {
+    -fx-border-color: #D9D6EA transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-background-color: transparent;
+}
+
+/* ---------- Tarjetas (resumen y ranking) ---------- */
+.tema-claro .summary-card,
+.tema-claro .ranking-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D9D6EA;
+    -fx-effect: dropshadow(gaussian, rgba(60, 50, 120, 0.08), 12, 0, 0, 2);
+}
+
+/* ---------- Campos de texto (nickname y expresión) ---------- */
+.tema-claro .text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #1E1B3A;
+    -fx-prompt-text-fill: #6B6885;
+    -fx-border-color: #D9D6EA;
+}
+
+.tema-claro .text-field:focused {
+    -fx-border-color: #7B5CFF;
+}
+
+.tema-claro .expression-input-flash {
+    -fx-background-color: #F1ECFF;
+    -fx-border-color: #7B5CFF;
+}
+
+/* ---------- Pantalla de inicio: modos y botón de ranking ---------- */
+.tema-claro .game-mode-button {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #5B5877;
+    -fx-border-color: #D9D6EA;
+}
+
+.tema-claro .game-mode-button:hover {
+    -fx-background-color: #EEEBFB;
+    -fx-text-fill: #1E1B3A;
+}
+
+.tema-claro .ranking-home-button {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .ranking-home-button:hover {
+    -fx-background-color: #EEEBFB;
+}
+
+/* ---------- Botones secundarios (resumen y ranking) ---------- */
+.tema-claro .secondary-button,
+.tema-claro .ranking-button {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #3F2FA8;
+}
+
+.tema-claro .secondary-button:hover,
+.tema-claro .ranking-button:hover {
+    -fx-background-color: #EEEBFB;
+}
+
+/* ---------- Pantalla de juego: barra superior ---------- */
+.tema-claro .icon-button {
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .icon-button:hover {
+    -fx-text-fill: #5B3FD9;
+}
+
+.tema-claro .timer-badge {
+    -fx-background-color: #FFFFFF;
+}
+
+.tema-claro .timer-icon,
+.tema-claro .timer-label {
+    -fx-text-fill: #4A3FB0;
+}
+
+.tema-claro .exit-button {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #2A2650;
+    -fx-border-color: #D9D6EA;
+}
+
+.tema-claro .exit-button:hover {
+    -fx-background-color: #EEEBFB;
+}
+
+/* ---------- Pantalla de juego: objetivos y teclado ---------- */
+.tema-claro .number-button,
+.tema-claro .op-symbol-button,
+.tema-claro .action-control-button {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #2A2650;
+    -fx-border-color: #D9D6EA;
+}
+
+.tema-claro .number-button:hover,
+.tema-claro .op-symbol-button:hover,
+.tema-claro .action-control-button:hover {
+    -fx-background-color: #EEEBFB;
+}
+
+/* Objetivo seleccionado (después de las reglas base para que gane) */
+.tema-claro .number-button-selected {
+    -fx-background-color: #E7E1FF;
+    -fx-border-color: #7B5CFF;
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .number-button-selected:hover {
+    -fx-background-color: #DDD4FF;
+}
+
+/* Objetivo resuelto */
+.tema-claro .number-button-solved {
+    -fx-background-color: #D9F5E8;
+    -fx-border-color: #1F9D6B;
+    -fx-text-fill: #0F5132;
+}
+
+.tema-claro .number-button-solved:hover {
+    -fx-background-color: #C8EFDB;
+}
+
+/* Destello al pulsar un botón */
+.tema-claro .button-pressed-flash {
+    -fx-background-color: #D5CCFF;
+    -fx-border-color: #7B5CFF;
+    -fx-text-fill: #1E1B3A;
+}
+
+.tema-claro .dynamic-number-button.button-pressed-flash,
+.tema-claro .primary-equals-button.button-pressed-flash {
+    -fx-background-color: #5B3FD9;
+    -fx-text-fill: #FFFFFF;
+}
+
+/* Números del reto ya usados en la expresión */
+.tema-claro .dynamic-number-button:disabled {
+    -fx-background-color: #D8D4EA;
+    -fx-text-fill: #6B6885;
+}
+
+/* ---------- Ranking: tabla ---------- */
+.tema-claro .table-view {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D9D6EA;
+    -fx-control-inner-background: #FFFFFF;
+    -fx-table-cell-border-color: #E6E3F4;
+    -fx-text-background-color: #1E1B3A;
+}
+
+.tema-claro .table-view .column-header-background {
+    -fx-background-color: #EFEDFA;
+}
+
+.tema-claro .table-view .column-header,
+.tema-claro .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #D9D6EA transparent;
+}
+
+.tema-claro .table-view .column-header .label {
+    -fx-text-fill: #5B5877;
+}
+
+.tema-claro .table-row-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-text-background-color: #1E1B3A;
+}
+
+.tema-claro .table-row-cell:odd {
+    -fx-background-color: #FAF9FF;
+}
+
+.tema-claro .table-row-cell:selected {
+    -fx-background-color: #E4DCFF;
+    -fx-text-background-color: #1E1B3A;
+}
+
+/* ---------- Ventanas de reglas y pista ---------- */
+.tema-claro .icono-ventana {
+    -fx-background-color: #EDE8FF;
+    -fx-text-fill: #5B3FD9;
+}
+
+.tema-claro .ventana-titulo,
+.tema-claro .seccion-titulo,
+.tema-claro .estado-titulo {
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .ventana-subtitulo,
+.tema-claro .contador,
+.tema-claro .etiqueta {
+    -fx-text-fill: #5B5877;
+}
+
+.tema-claro .tarjeta {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D9D6EA;
+    -fx-effect: dropshadow(gaussian, rgba(60, 50, 120, 0.08), 12, 0, 0, 2);
+}
+
+.tema-claro .regla-texto {
+    -fx-text-fill: #3B3860;
+}
+
+.tema-claro .paso-numero {
+    -fx-background-color: #EDE8FF;
+    -fx-text-fill: #4A3FB0;
+}
+
+.tema-claro .chip-operador {
+    -fx-background-color: #F4F3FB;
+    -fx-border-color: #D9D6EA;
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .chip-avanzado {
+    -fx-background-color: #E7E1FF;
+    -fx-border-color: #7B5CFF;
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .etiqueta-hardcore,
+.tema-claro .nota-hardcore {
+    -fx-text-fill: #B4234A;
+}
+
+.tema-claro .solucion-tarjeta {
+    -fx-background-color: #F4F3FB;
+    -fx-border-color: #D9D6EA;
+}
+
+.tema-claro .solucion-indice {
+    -fx-background-color: #E7E1FF;
+    -fx-text-fill: #4A3FB0;
+}
+
+.tema-claro .solucion-texto {
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .boton-secundario,
+.tema-claro .boton-copiar {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #3F2FA8;
+}
+
+.tema-claro .boton-secundario:hover,
+.tema-claro .boton-copiar:hover {
+    -fx-background-color: #EEEBFB;
+}

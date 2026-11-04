@@ -12,6 +12,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        GestorTema.inicializar(stage);
         Parent root = FXMLLoader.load(
                 App.class.getResource("/co/edu/poli/allten/views/pantalla-inicio.fxml"));
         stage.setTitle("Allten");

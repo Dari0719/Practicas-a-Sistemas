@@ -1,0 +1,247 @@
+/* Ventanas de reglas y pista - tema oscuro (el claro está en tema-claro.css) */
+
+.root {
+    -fx-background-color: #1a1b26;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+/* ---------- Encabezado ---------- */
+.icono-ventana {
+    -fx-alignment: center;
+    -fx-background-color: #26233d;
+    -fx-background-radius: 12px;
+    -fx-border-color: #7b5cff;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1px;
+    -fx-pref-width: 46px;
+    -fx-pref-height: 46px;
+    -fx-text-fill: #d8d0ff;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.ventana-titulo {
+    -fx-text-fill: #e6e2ff;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.ventana-subtitulo,
+.contador {
+    -fx-text-fill: #aaa6c1;
+    -fx-font-size: 12px;
+}
+
+.modo-chip {
+    -fx-background-color: #7b45f6;
+    -fx-background-radius: 18px;
+    -fx-padding: 6px 14px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.modo-chip-hardcore {
+    -fx-background-color: #e11d48;
+}
+
+/* ---------- Tarjetas y textos ---------- */
+.tarjeta {
+    -fx-background-color: #232233;
+    -fx-background-radius: 13px;
+    -fx-border-color: #454258;
+    -fx-border-radius: 13px;
+    -fx-border-width: 1px;
+    -fx-padding: 16px;
+}
+
+.etiqueta {
+    -fx-text-fill: #a8a4bd;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.etiqueta-hardcore {
+    -fx-text-fill: #ff8fa8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.seccion-titulo {
+    -fx-text-fill: #e6e2ff;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.seccion-numero {
+    -fx-alignment: center;
+    -fx-background-color: #7b5cff;
+    -fx-background-radius: 12px;
+    -fx-pref-width: 24px;
+    -fx-pref-height: 24px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.paso-numero {
+    -fx-alignment: center;
+    -fx-background-color: #2f2c4a;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-text-fill: #d8d0ff;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.regla-texto {
+    -fx-text-fill: #d0cde2;
+    -fx-font-size: 13px;
+}
+
+.punto {
+    -fx-text-fill: #7b5cff;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* ---------- Operaciones ---------- */
+.chip-operador,
+.chip-avanzado {
+    -fx-background-color: #2b293c;
+    -fx-background-radius: 16px;
+    -fx-border-color: #454258;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1px;
+    -fx-padding: 6px 14px;
+    -fx-text-fill: #e6e2ff;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.chip-avanzado {
+    -fx-background-color: #34305a;
+    -fx-border-color: #7b5cff;
+}
+
+/* ---------- Pista ---------- */
+.numero-chip {
+    -fx-alignment: center;
+    -fx-background-color: #7b5cff;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 64px;
+    -fx-pref-height: 56px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.solucion-tarjeta {
+    -fx-background-color: #2b293c;
+    -fx-background-radius: 10px;
+    -fx-border-color: #454258;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 8px 10px 8px 12px;
+}
+
+.solucion-indice {
+    -fx-alignment: center;
+    -fx-background-color: #3a3654;
+    -fx-background-radius: 11px;
+    -fx-pref-width: 22px;
+    -fx-pref-height: 22px;
+    -fx-text-fill: #d8d0ff;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.solucion-texto {
+    -fx-font-family: "Consolas", "Monospaced";
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e6e2ff;
+}
+
+.nota-hardcore {
+    -fx-text-fill: #ffb3c1;
+    -fx-font-size: 12px;
+}
+
+/* ---------- Mensajes de estado ---------- */
+.estado-icono {
+    -fx-alignment: center;
+    -fx-pref-width: 64px;
+    -fx-pref-height: 64px;
+    -fx-background-radius: 32px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+.estado-ok    { -fx-background-color: #246b50; }
+.estado-aviso { -fx-background-color: #8a6d1d; }
+.estado-error { -fx-background-color: #b42340; }
+
+.estado-titulo {
+    -fx-text-fill: #e6e2ff;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* ---------- Botones ---------- */
+.boton-primario {
+    -fx-background-color: linear-gradient(to right, #7b5cff, #9d67ff);
+    -fx-background-radius: 10px;
+    -fx-padding: 12px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.boton-primario:hover {
+    -fx-background-color: linear-gradient(to right, #6a4de5, #8957e8);
+}
+
+.boton-secundario,
+.boton-copiar {
+    -fx-background-color: #262344;
+    -fx-background-radius: 10px;
+    -fx-border-color: #7657dd;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 9px 16px;
+    -fx-text-fill: #e6e2ff;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.boton-copiar {
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 6px 12px;
+    -fx-font-size: 12px;
+}
+
+.boton-secundario:hover,
+.boton-copiar:hover {
+    -fx-background-color: #34305a;
+}
+
+.boton-secundario:disabled {
+    -fx-opacity: 0.5;
+}
+
+/* ---------- Zona con scroll transparente ---------- */
+.scroll-ayuda {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-ayuda > .viewport {
+    -fx-background-color: transparent;
+}

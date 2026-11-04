@@ -117,3 +117,21 @@ Las pantallas están separadas en recursos:
 - `game-home.fxml` y `game-home.css` para el inicio;
 - `game.fxml` y `game.css` para la partida;
 - `game-summary.fxml` para el resumen final.
+
+## Ejemplos visuales de las reglas
+
+![Números disponibles del reto](image.png)
+
+![Objetivos del reto](image-1.png)
+
+![Uso de los números](image-3.png)
+
+![Uso de fracciones](image-5.png)
+
+![Números negativos](image-6.png)
+
+![Números de varios dígitos](image-7.png)
+
+![Expresiones matemáticas](image-2.png)
+
+![Respuesta correcta de un número](image-4.png)

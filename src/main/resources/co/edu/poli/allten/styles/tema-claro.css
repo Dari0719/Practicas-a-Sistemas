@@ -239,3 +239,78 @@
     -fx-background-color: #E4DCFF;
     -fx-text-background-color: #1E1B3A;
 }
+
+/* ---------- Ventanas de reglas y pista ---------- */
+.tema-claro .icono-ventana {
+    -fx-background-color: #EDE8FF;
+    -fx-text-fill: #5B3FD9;
+}
+
+.tema-claro .ventana-titulo,
+.tema-claro .seccion-titulo,
+.tema-claro .estado-titulo {
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .ventana-subtitulo,
+.tema-claro .contador,
+.tema-claro .etiqueta {
+    -fx-text-fill: #5B5877;
+}
+
+.tema-claro .tarjeta {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #D9D6EA;
+    -fx-effect: dropshadow(gaussian, rgba(60, 50, 120, 0.08), 12, 0, 0, 2);
+}
+
+.tema-claro .regla-texto {
+    -fx-text-fill: #3B3860;
+}
+
+.tema-claro .paso-numero {
+    -fx-background-color: #EDE8FF;
+    -fx-text-fill: #4A3FB0;
+}
+
+.tema-claro .chip-operador {
+    -fx-background-color: #F4F3FB;
+    -fx-border-color: #D9D6EA;
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .chip-avanzado {
+    -fx-background-color: #E7E1FF;
+    -fx-border-color: #7B5CFF;
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .etiqueta-hardcore,
+.tema-claro .nota-hardcore {
+    -fx-text-fill: #B4234A;
+}
+
+.tema-claro .solucion-tarjeta {
+    -fx-background-color: #F4F3FB;
+    -fx-border-color: #D9D6EA;
+}
+
+.tema-claro .solucion-indice {
+    -fx-background-color: #E7E1FF;
+    -fx-text-fill: #4A3FB0;
+}
+
+.tema-claro .solucion-texto {
+    -fx-text-fill: #2A2650;
+}
+
+.tema-claro .boton-secundario,
+.tema-claro .boton-copiar {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #3F2FA8;
+}
+
+.tema-claro .boton-secundario:hover,
+.tema-claro .boton-copiar:hover {
+    -fx-background-color: #EEEBFB;
+}

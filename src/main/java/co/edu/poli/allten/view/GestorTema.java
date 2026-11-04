@@ -54,7 +54,7 @@ public final class GestorTema {
         }
     }
 
-    private static void aplicar(Scene escena) {
+    public static void aplicar(Scene escena) {
         if (escena == null) {
             return;
         }

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="568.0" prefWidth="1000.0" spacing="12.0"
+<VBox fx:id="resumenRoot" alignment="TOP_CENTER" prefHeight="568.0" prefWidth="1000.0" spacing="12.0"
       styleClass="root" stylesheets="@../styles/pantalla-resumen.css"
       xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="co.edu.poli.allten.controller.PantallaResumenController">
@@ -16,14 +16,20 @@
       <Insets bottom="12.0" left="24.0" right="24.0" top="14.0" />
    </padding>
    <children>
-      <Label styleClass="app-title" text="Allten" />
+      <HBox alignment="CENTER" spacing="12.0">
+         <Region HBox.hgrow="ALWAYS" />
+         <Label styleClass="app-title" text="Allten" />
+         <Region HBox.hgrow="ALWAYS" />
+         <Button fx:id="temaButton" onAction="#alternarTema"
+                 styleClass="theme-button" text="☀  Tema claro" />
+      </HBox>
       <Separator styleClass="header-separator" />
       <VBox alignment="CENTER" spacing="7.0">
          <Label styleClass="success-icon" text="✓" />
          <Label styleClass="completion-title" text="¡Partida completada!" />
          <Label styleClass="completion-subtitle" text="¡Bien hecho! Este es el resumen de tu partida." />
       </VBox>
-      <VBox maxWidth="564.0" spacing="12.0" styleClass="summary-card">
+      <VBox maxWidth="870.0" spacing="12.0" styleClass="summary-card">
          <padding>
             <Insets bottom="16.0" left="20.0" right="20.0" top="16.0" />
          </padding>
@@ -39,14 +45,24 @@
             </VBox>
          </HBox>
          <Separator styleClass="card-separator" />
-         <VBox alignment="CENTER" spacing="3.0">
-            <Label styleClass="time-caption" text="◷  Tiempo empleado" />
-            <Label fx:id="tiempoLabel" styleClass="elapsed-time" text="00:00" />
-            <Label fx:id="tiempoDescripcionLabel" styleClass="time-description"
-                   text="0 minutos y 0 segundos" />
-         </VBox>
+         <HBox alignment="CENTER" spacing="24.0">
+            <VBox alignment="CENTER" spacing="3.0" HBox.hgrow="ALWAYS">
+               <Label styleClass="time-caption" text="◷  Tiempo empleado" />
+               <Label fx:id="tiempoLabel" styleClass="elapsed-time" text="00:00" />
+               <Label fx:id="tiempoDescripcionLabel" styleClass="time-description"
+                      text="0 minutos y 0 segundos" />
+               <Label fx:id="intentosLabel" styleClass="time-description" text="0 intentos" />
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="100.0" styleClass="card-separator" />
+            <VBox alignment="CENTER" spacing="3.0" HBox.hgrow="ALWAYS">
+               <Label styleClass="rank-caption" text="♜  Posición en el ranking" />
+               <Label fx:id="posicionLabel" styleClass="rank-position" text="—" />
+               <Label fx:id="posicionDescripcionLabel" styleClass="rank-description"
+                      text="Consultando posición..." />
+            </VBox>
+         </HBox>
       </VBox>
-      <VBox maxWidth="564.0" spacing="10.0">
+      <VBox maxWidth="870.0" spacing="10.0">
          <Button maxWidth="1.7976931348623157E308" onAction="#consultarRanking"
                  styleClass="ranking-button" text="♜  Consultar ranking  →" />
          <HBox spacing="12.0">
@@ -55,6 +71,8 @@
             <Button maxWidth="1.7976931348623157E308" onAction="#nuevaPartida"
                     styleClass="primary-button" text="⟳  Nueva partida" HBox.hgrow="ALWAYS" />
          </HBox>
+         <Button maxWidth="1.7976931348623157E308" onAction="#descargarResumen"
+                 styleClass="download-button" text="↓  Descargar resumen PNG" />
       </VBox>
       <Label styleClass="footer-note" text="Allten · ¡Gracias por jugar!" />
       <Region VBox.vgrow="ALWAYS" />

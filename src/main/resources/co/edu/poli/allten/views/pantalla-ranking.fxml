@@ -3,14 +3,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="900.0" spacing="18.0"
+<VBox fx:id="rankingRoot" alignment="TOP_CENTER" prefHeight="600.0" prefWidth="900.0" spacing="18.0"
       styleClass="root" stylesheets="@../styles/pantalla-ranking.css"
       xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="co.edu.poli.allten.controller.PantallaRankingController">
@@ -22,6 +21,8 @@
          <Label styleClass="app-title" text="Allten" />
          <Region HBox.hgrow="ALWAYS" />
          <Label fx:id="modoLabel" styleClass="mode-badge" text="Modo NORMAL" />
+         <Button fx:id="temaButton" onAction="#alternarTema"
+                 styleClass="secondary-button" text="☀  Tema claro" />
       </HBox>
       <VBox spacing="5.0">
          <Label styleClass="screen-title" text="Ranking de partidas" />
@@ -48,6 +49,8 @@
                  text="←  Volver" />
          <Button onAction="#actualizarRanking" styleClass="secondary-button"
                  text="⟳  Actualizar" />
+         <Button onAction="#descargarRanking" styleClass="secondary-button"
+                 text="↓  Descargar ranking PNG" />
       </HBox>
    </children>
 </VBox>

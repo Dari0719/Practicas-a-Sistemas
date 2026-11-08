@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.OptionalInt;
 
 /** Consulta el ranking de partidas completadas. */
 public class RankingDAO {
@@ -33,7 +34,7 @@ public class RankingDAO {
                 FROM partida p
                 JOIN jugador j ON j.id = p.jugador_id
                 WHERE p.estado = 'COMPLETADO' AND p.modo = ?
-                ORDER BY p.tiempo_total ASC, p.intentos ASC, p.fecha ASC
+                ORDER BY p.tiempo_total ASC, p.intentos ASC, p.fecha ASC, p.id ASC
                 LIMIT ?
                 """;
 
@@ -54,5 +55,51 @@ public class RankingDAO {
             }
         }
         return resultados;
+    }
+
+    /**
+     * Devuelve el puesto global de una partida completada en su modo,
+     * usando el mismo orden del ranking.
+     */
+    public OptionalInt obtenerPosicion(int partidaId, ModoJuego modo) throws SQLException {
+        if (partidaId <= 0) {
+            throw new IllegalArgumentException("El identificador de la partida debe ser mayor que cero.");
+        }
+        Objects.requireNonNull(modo, "El modo de juego es obligatorio.");
+
+        String sql = """
+                SELECT COUNT(anterior.id) + 1 AS posicion
+                FROM partida actual
+                LEFT JOIN partida anterior
+                    ON anterior.estado = 'COMPLETADO'
+                    AND anterior.modo = actual.modo
+                    AND (
+                        anterior.tiempo_total < actual.tiempo_total
+                        OR (anterior.tiempo_total = actual.tiempo_total
+                            AND anterior.intentos < actual.intentos)
+                        OR (anterior.tiempo_total = actual.tiempo_total
+                            AND anterior.intentos = actual.intentos
+                            AND anterior.fecha < actual.fecha)
+                        OR (anterior.tiempo_total = actual.tiempo_total
+                            AND anterior.intentos = actual.intentos
+                            AND anterior.fecha = actual.fecha
+                            AND anterior.id < actual.id)
+                    )
+                WHERE actual.id = ?
+                    AND actual.estado = 'COMPLETADO'
+                    AND actual.modo = ?
+                GROUP BY actual.id
+                """;
+
+        try (Connection conn = conexion.obtenerConexion();
+                PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, partidaId);
+            sentencia.setString(2, modo.name());
+            try (ResultSet fila = sentencia.executeQuery()) {
+                return fila.next()
+                        ? OptionalInt.of(fila.getInt("posicion"))
+                        : OptionalInt.empty();
+            }
+        }
     }
 }

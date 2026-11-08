@@ -40,6 +40,15 @@
     -fx-text-fill: #6B6885;
 }
 
+.tema-claro .rank-caption,
+.tema-claro .rank-description {
+    -fx-text-fill: #5B5877;
+}
+
+.tema-claro .rank-position {
+    -fx-text-fill: #4A3FB0;
+}
+
 .tema-claro .elapsed-time {
     -fx-text-fill: #3F2FA8;
 }
@@ -116,6 +125,15 @@
 
 .tema-claro .secondary-button:hover,
 .tema-claro .ranking-button:hover {
+    -fx-background-color: #EEEBFB;
+}
+
+.tema-claro .theme-button {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #3F2FA8;
+}
+
+.tema-claro .theme-button:hover {
     -fx-background-color: #EEEBFB;
 }
 

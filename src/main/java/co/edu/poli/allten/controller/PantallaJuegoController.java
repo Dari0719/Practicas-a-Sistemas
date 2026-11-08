@@ -8,6 +8,7 @@ import java.util.Map;
 
 import co.edu.poli.allten.database.ConexionBaseDatos;
 import co.edu.poli.allten.database.JugadorDAO;
+import co.edu.poli.allten.database.RankingDAO;
 import co.edu.poli.allten.database.SesionJuegoDAO;
 import co.edu.poli.allten.model.BuscadorSoluciones;
 import co.edu.poli.allten.model.ModoJuego;
@@ -321,10 +322,20 @@ public class PantallaJuegoController {
 
     private void finalizarPartida() {
         String errorPersistencia = null;
+        String errorRanking = null;
+        Integer posicionRanking = null;
         try {
             ConexionBaseDatos conexion = new ConexionBaseDatos();
             new JugadorDAO(conexion).guardar(sesion.getJugador());
-            new SesionJuegoDAO(conexion).guardar(sesion);
+            int partidaId = new SesionJuegoDAO(conexion).guardar(sesion);
+            try {
+                var posicion = new RankingDAO(conexion).obtenerPosicion(partidaId, sesion.getModo());
+                if (posicion.isPresent()) {
+                    posicionRanking = posicion.getAsInt();
+                }
+            } catch (SQLException | IllegalStateException excepcion) {
+                errorRanking = excepcion.getMessage();
+            }
         } catch (SQLException | IllegalStateException excepcion) {
             errorPersistencia = excepcion.getMessage();
         }
@@ -334,7 +345,7 @@ public class PantallaJuegoController {
                     App.class.getResource("/co/edu/poli/allten/views/pantalla-resumen.fxml"));
             Parent raiz = cargador.load();
             PantallaResumenController controlador = cargador.getController();
-            controlador.configurarSesion(sesion);
+            controlador.configurarSesion(sesion, posicionRanking, errorRanking);
 
             Stage escenario = (Stage) modeBadge.getScene().getWindow();
             escenario.setScene(new Scene(raiz));
@@ -353,6 +364,12 @@ public class PantallaJuegoController {
                     "No se pudo guardar la partida",
                     "El resumen está disponible, pero el resultado no se guardó y no aparecerá "
                             + "en el ranking.\n\nDetalle: " + errorPersistencia);
+        } else if (errorRanking != null) {
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "No se pudo consultar la posición",
+                    "El resumen está disponible, pero no fue posible consultar el ranking.\n\n"
+                            + "Detalle: " + errorRanking);
         }
     }
 

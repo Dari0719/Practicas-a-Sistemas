@@ -12,9 +12,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import co.edu.poli.allten.database.ConexionBaseDatos;
@@ -23,6 +25,8 @@ import co.edu.poli.allten.database.ResultadoRanking;
 import co.edu.poli.allten.model.ModoJuego;
 import co.edu.poli.allten.model.SesionJuego;
 import co.edu.poli.allten.view.App;
+import co.edu.poli.allten.view.ExportadorPNG;
+import co.edu.poli.allten.view.GestorTema;
 
 public class PantallaRankingController {
 
@@ -50,11 +54,20 @@ public class PantallaRankingController {
     @FXML
     private Label estadoRankingLabel;
 
+    @FXML
+    private VBox rankingRoot;
+
+    @FXML
+    private Button temaButton;
+
     private SesionJuego sesion;
     private ModoJuego modo = ModoJuego.NORMAL;
+    private Integer posicionRanking;
+    private String errorRanking;
 
     @FXML
     private void initialize() {
+        actualizarTextoTema();
         apodoColumn.setCellValueFactory(fila ->
                 new SimpleStringProperty(fila.getValue().getApodo()));
         tiempoColumn.setCellValueFactory(fila ->
@@ -66,8 +79,20 @@ public class PantallaRankingController {
         tablaRanking.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
     }
 
-    public void configurarSesion(SesionJuego sesion) {
+    @FXML
+    private void alternarTema() {
+        GestorTema.alternar();
+        actualizarTextoTema();
+    }
+
+    private void actualizarTextoTema() {
+        temaButton.setText(GestorTema.esClaro() ? "☾  Tema oscuro" : "☀  Tema claro");
+    }
+
+    public void configurarSesion(SesionJuego sesion, Integer posicionRanking, String errorRanking) {
         this.sesion = sesion;
+        this.posicionRanking = posicionRanking;
+        this.errorRanking = errorRanking;
         configurarModo(sesion.getModo());
     }
 
@@ -89,7 +114,7 @@ public class PantallaRankingController {
                     App.class.getResource("/co/edu/poli/allten/views/pantalla-resumen.fxml"));
             Parent raiz = cargador.load();
             PantallaResumenController controlador = cargador.getController();
-            controlador.configurarSesion(sesion);
+            controlador.configurarSesion(sesion, posicionRanking, errorRanking);
 
             Stage escenario = (Stage) tablaRanking.getScene().getWindow();
             escenario.setScene(new Scene(raiz));
@@ -121,10 +146,31 @@ public class PantallaRankingController {
         cargarRanking();
     }
 
+    @FXML
+    private void descargarRanking() {
+        Stage escenario = (Stage) tablaRanking.getScene().getWindow();
+        try {
+            if (ExportadorPNG.guardar(
+                    rankingRoot,
+                    escenario,
+                    "ranking-allten-" + modo.name().toLowerCase() + ".png")) {
+                mostrarAlerta(
+                        Alert.AlertType.INFORMATION,
+                        "Ranking descargado",
+                        "La imagen del ranking actual se guardó correctamente.");
+            }
+        } catch (IOException excepcion) {
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "No se pudo descargar el ranking",
+                    "Ocurrió un error al guardar la imagen: " + excepcion.getMessage());
+        }
+    }
+
     private void cargarRanking() {
         try {
             var resultados = new RankingDAO(new ConexionBaseDatos())
-                    .obtenerRanking(10, modo);
+                    .obtenerRanking(100, modo);
             tablaRanking.setItems(FXCollections.observableArrayList(resultados));
             estadoRankingLabel.setText(resultados.isEmpty()
                     ? "Aún no hay partidas completadas en este modo."

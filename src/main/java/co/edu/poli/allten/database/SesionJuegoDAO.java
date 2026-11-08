@@ -5,6 +5,7 @@ import co.edu.poli.allten.model.EstadoJuego;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ public class SesionJuegoDAO {
      * Se conservan las partidas completadas y abandonadas; las que siguen en curso
      * no se persisten ni pueden aparecer en el ranking.
      */
-    public void guardar(SesionJuego sesion) throws SQLException {
+    public int guardar(SesionJuego sesion) throws SQLException {
         Objects.requireNonNull(sesion, "La sesión es obligatoria.");
         if (sesion.getEstado() == null || sesion.getFecha() == null) {
             throw new IllegalStateException("Solo se puede guardar una sesión iniciada.");
@@ -40,14 +41,22 @@ public class SesionJuegoDAO {
                 VALUES (?, ?, ?, ?, ?, ?)
                 """;
         try (Connection conn = conexion.obtenerConexion();
-                PreparedStatement sentencia = conn.prepareStatement(sql)) {
+                PreparedStatement sentencia = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             sentencia.setInt(1, sesion.getJugador().getId());
             sentencia.setLong(2, sesion.getTiempoTotal());
             sentencia.setInt(3, sesion.getIntentos());
             sentencia.setString(4, sesion.getEstado().name());
             sentencia.setString(5, sesion.getModo().name());
             sentencia.setTimestamp(6, Timestamp.valueOf(sesion.getFecha()));
-            sentencia.executeUpdate();
+            if (sentencia.executeUpdate() != 1) {
+                throw new SQLException("No se pudo guardar la partida.");
+            }
+            try (var claves = sentencia.getGeneratedKeys()) {
+                if (!claves.next()) {
+                    throw new SQLException("No se recibió el identificador de la partida guardada.");
+                }
+                return claves.getInt(1);
+            }
         }
     }
 }

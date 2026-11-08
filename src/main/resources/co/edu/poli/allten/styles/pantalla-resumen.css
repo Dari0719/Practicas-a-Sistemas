@@ -88,9 +88,27 @@
     -fx-font-size: 10px;
 }
 
+.rank-caption {
+    -fx-text-fill: #d0cde2;
+    -fx-font-size: 12px;
+}
+
+.rank-position {
+    -fx-text-fill: #9b5cff;
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+}
+
+.rank-description {
+    -fx-text-fill: #c3bfd8;
+    -fx-font-size: 11px;
+}
+
 .ranking-button,
 .secondary-button,
-.primary-button {
+.primary-button,
+.download-button,
+.theme-button {
     -fx-background-radius: 10px;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -99,7 +117,8 @@
 }
 
 .ranking-button,
-.secondary-button {
+.secondary-button,
+.theme-button {
     -fx-background-color: #262344;
     -fx-border-color: #7657dd;
     -fx-border-radius: 10px;
@@ -115,6 +134,23 @@
 .primary-button {
     -fx-background-color: linear-gradient(to right, #7b45f6, #5657ef);
     -fx-text-fill: #ffffff;
+}
+
+.download-button {
+    -fx-background-color: #4c2b9d;
+    -fx-border-color: #8b5cff;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-text-fill: #ffffff;
+}
+
+.download-button:hover {
+    -fx-background-color: #6038bf;
+}
+
+.theme-button {
+    -fx-padding: 7px 12px;
+    -fx-font-size: 11px;
 }
 
 .primary-button:hover {

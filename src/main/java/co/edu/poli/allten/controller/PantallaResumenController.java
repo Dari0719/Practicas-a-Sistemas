@@ -87,7 +87,7 @@ public class PantallaResumenController {
         temaButton.setText(GestorTema.esClaro() ? "☾  Tema oscuro" : "☀  Tema claro");
     }
 
-    public void configurarSesion(SesionJuego sesion, Integer posicionRanking, String errorRanking) {
+    public void configurarSesion(SesionJuego sesion, Integer posicionRanking, String errorRanking) {}
     /**
      * Recibe la partida terminada y muestra sus datos en pantalla: el apodo, el
      * modo y el tiempo total. El tiempo se muestra de dos maneras: en formato
@@ -241,3 +241,4 @@ public class PantallaResumenController {
         alerta.showAndWait();
     }
 }
+

@@ -32,14 +32,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 public class PantallaJuegoController {
@@ -171,82 +169,67 @@ public class PantallaJuegoController {
     }
 
     @FXML
-    private void consultarReglas() {
-        animarSeleccion(reglasButton);
-        String operaciones = sesion.getModo() == ModoJuego.HARDCORE
-                ? "Operaciones permitidas: suma (+), resta (-), multiplicación (×), "
-                        + "división (÷), potencia (^), raíz cuadrada (√) como máximo una vez "
-                        + "por expresión, y paréntesis. Cada respuesta debe incluir una "
-                        + "operación avanzada no trivial."
-                : "Operaciones permitidas: suma (+), resta (-), multiplicación (×), "
-                        + "división (÷) y paréntesis.";
-        mostrarAlerta(
-                Alert.AlertType.INFORMATION,
-                "Reglas del juego",
-                "Resuelve los objetivos del 1 al 10 en cualquier orden.\n\n"
-                        + "Cada expresión debe usar los cuatro números generados exactamente "
-                        + "una vez. Puedes reutilizar el conjunto en cada objetivo.\n\n"
-                        + operaciones + " No se permite dividir entre cero.\n\n"
-                        + "El resultado debe ser un objetivo pendiente.");
-    }
+private void consultarReglas() {
+    animarSeleccion(reglasButton);
+    VentanaReglasController.mostrar(
+            reglasButton.getScene().getWindow(),
+            sesion.getModo());
+}
 
     @FXML
-    private void consultarPista() {
-        animarSeleccion(pistaButton);
-        Ronda ronda = sesion.getRondas().stream()
-                .filter(item -> item.getNumeroObjetivo() == objetivoSeleccionado)
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException(
-                        "No se encontró el objetivo " + objetivoSeleccionado + "."));
+private void consultarPista() {
+    animarSeleccion(pistaButton);
 
-        if (ronda.isResuelta()) {
-            mostrarAlerta(
-                    Alert.AlertType.INFORMATION,
-                    "Objetivo resuelto",
-                    "El objetivo " + objetivoSeleccionado + " ya está resuelto.");
+    Window propietario = pistaButton.getScene().getWindow();
+
+    Ronda ronda = sesion.getRondas().stream()
+            .filter(item -> item.getNumeroObjetivo() == objetivoSeleccionado)
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException(
+                    "No se encontró el objetivo " + objetivoSeleccionado + "."));
+
+    if (ronda.isResuelta()) {
+        VentanaPistaController.mostrarEstado(
+                propietario,
+                objetivoSeleccionado,
+                VentanaPistaController.EstadoPista.RESUELTO,
+                "El objetivo " + objetivoSeleccionado
+                        + " ya está resuelto. Elige otro objetivo para pedir una pista.");
+        return;
+    }
+
+    try {
+        List<String> soluciones = new BuscadorSoluciones().buscarSoluciones(
+                sesion.getNumerosDisponibles(),
+                objetivoSeleccionado,
+                sesion.getModo());
+
+        if (soluciones.isEmpty()) {
+            VentanaPistaController.mostrarEstado(
+                    propietario,
+                    objetivoSeleccionado,
+                    VentanaPistaController.EstadoPista.SIN_SOLUCION,
+                    "No se encontró una solución para el objetivo "
+                            + objetivoSeleccionado + ".");
             return;
         }
 
-        try {
-            List<String> soluciones = new BuscadorSoluciones().buscarSoluciones(
-                    sesion.getNumerosDisponibles(),
-                    objetivoSeleccionado,
-                    sesion.getModo());
-            if (soluciones.isEmpty()) {
-                mostrarAlerta(
-                        Alert.AlertType.WARNING,
-                        "No hay pista disponible",
-                        "No se encontró una solución para el objetivo " + objetivoSeleccionado + ".");
-                return;
-            }
+        VentanaPistaController.mostrarPista(
+                propietario,
+                objetivoSeleccionado,
+                sesion.getNumerosDisponibles(),
+                sesion.getModo(),
+                soluciones);
 
-            mostrarPistaSeleccionable(objetivoSeleccionado, soluciones.get(0));
-        } catch (IllegalArgumentException | UnsupportedOperationException excepcion) {
-            mostrarAlerta(
-                    Alert.AlertType.ERROR,
-                    "No se pudo generar la pista",
-                    excepcion.getMessage());
-        }
+    } catch (IllegalArgumentException | UnsupportedOperationException excepcion) {
+        VentanaPistaController.mostrarEstado(
+                propietario,
+                objetivoSeleccionado,
+                VentanaPistaController.EstadoPista.ERROR,
+                excepcion.getMessage());
     }
+}
 
-    private void mostrarPistaSeleccionable(int objetivo, String expresion) {
-        Dialog<Void> dialogo = new Dialog<>();
-        dialogo.setTitle("Pista para el objetivo " + objetivo);
-        dialogo.setHeaderText(null);
-        dialogo.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
-
-        Label instrucciones = new Label((sesion.getModo() == ModoJuego.HARDCORE
-                ? "La pista respeta las reglas Hardcore e incluye una operación "
-                        + "avanzada no trivial.\n\n"
-                : "")
-                + "Una forma de obtener " + objetivo + " es:");
-        TextField campoPista = new TextField(expresion);
-        campoPista.setEditable(false);
-        campoPista.setFocusTraversable(true);
-        VBox contenido = new VBox(10, instrucciones, campoPista);
-        dialogo.getDialogPane().setContent(contenido);
-        dialogo.showAndWait();
-    }
 
     @FXML
     private void seleccionarObjetivo(ActionEvent evento) {
@@ -274,45 +257,75 @@ public class PantallaJuegoController {
 
     @FXML
     private void validarExpresion() {
-        animarPulsacion(btnIgual);
+    animarPulsacion(btnIgual);
         String expresion = campoExpresion.getText();
-        String expresionParaValidar = normalizarOperadores(expresion);
-        ResultadoValidacion resultado = sesion.procesarRespuesta(expresionParaValidar);
 
-        if (resultado == ResultadoValidacion.VALIDO) {
-            int objetivoResuelto = (int) Math.round(
-                    new ValidadorExpresion().calcularResultado(expresionParaValidar));
-            marcarObjetivosResueltos();
-            campoExpresion.clear();
-            objetivoSeleccionado = objetivoResuelto;
-            actualizarObjetivoSeleccionado();
-
-            if (sesion.estaCompleta()) {
-                cronometro.stop();
-                actualizarCronometro();
-                finalizarPartida();
-            } else {
-                mostrarAlerta(
-                        Alert.AlertType.INFORMATION,
-                        "¡Correcto!",
-                        "Resolviste el objetivo " + objetivoResuelto + ".");
-            }
-            return;
-        }
-
-        String mensaje = switch (resultado) {
-            case NUMEROS_INVALIDOS ->
-                "Usa los cuatro números generados exactamente una vez cada uno.";
-            case OPERACION_INVALIDA ->
-                "La operación no es válida. Revisa los operadores y paréntesis.";
-            case RESULTADO_INCORRECTO ->
-                "La expresión es válida, pero su resultado no corresponde a un objetivo pendiente.";
-            case OBJETIVO_YA_RESUELTO ->
-                "Ese objetivo ya fue resuelto o la partida ya terminó.";
-            case VALIDO -> throw new IllegalStateException("Resultado de validación inesperado.");
-        };
-        mostrarAlerta(Alert.AlertType.WARNING, "No se pudo validar", mensaje);
+    // Caso 1: no escribió nada
+    if (expresion == null || expresion.isBlank()) {
+        mostrarAlerta(
+                Alert.AlertType.WARNING,
+                "No se pudo validar",
+                "Pon una operación matemática");
+        campoExpresion.requestFocus();
+        return;
     }
+
+    // Caso 2: escribió números pero ningún signo (por ejemplo 6223)
+    if (!contieneSignoMatematico(expresion)) {
+        mostrarAlerta(
+                Alert.AlertType.WARNING,
+                "No se pudo validar",
+                "Usa un signo matemático que sea válido.");
+        campoExpresion.requestFocus();
+        return;
+    }
+
+    String expresionParaValidar = normalizarOperadores(expresion);
+    ResultadoValidacion resultado = sesion.procesarRespuesta(expresionParaValidar);
+
+    if (resultado == ResultadoValidacion.VALIDO) {
+        int objetivoResuelto = (int) Math.round(
+                new ValidadorExpresion().calcularResultado(expresionParaValidar));
+        marcarObjetivosResueltos();
+        campoExpresion.clear();
+        objetivoSeleccionado = objetivoResuelto;
+        actualizarObjetivoSeleccionado();
+
+        if (sesion.estaCompleta()) {
+            cronometro.stop();
+            actualizarCronometro();
+            finalizarPartida();
+        } else {
+            mostrarAlerta(
+                    Alert.AlertType.INFORMATION,
+                    "¡Correcto!",
+                    "Resolviste el objetivo " + objetivoResuelto + ".");
+        }
+        return;
+    }
+
+    String mensaje = switch (resultado) {
+        case NUMEROS_INVALIDOS ->
+            "Usa los cuatro números generados exactamente una vez cada uno.";
+        case OPERACION_INVALIDA ->
+            "La operación no es válida. Revisa los operadores y paréntesis.";
+        case RESULTADO_INCORRECTO ->
+            "La expresión es válida, pero su resultado no corresponde a un objetivo pendiente.";
+        case OBJETIVO_YA_RESUELTO ->
+            "Ese objetivo ya fue resuelto o la partida ya terminó.";
+        case VALIDO -> throw new IllegalStateException("Resultado de validación inesperado.");
+    };
+    mostrarAlerta(Alert.AlertType.WARNING, "No se pudo validar", mensaje);
+}
+    // Hay signo matemático si aparece alguna operación (los paréntesis solos no cuentan)
+    private boolean contieneSignoMatematico(String expresion) {
+    for (int indice = 0; indice < expresion.length(); indice++) {
+        if ("+-*/×÷^√".indexOf(expresion.charAt(indice)) >= 0) {
+            return true;
+        }
+    }
+    return false;
+}
 
     private void actualizarCronometro() {
         long segundosTotales = sesion.getTiempoTotal() / 1000;

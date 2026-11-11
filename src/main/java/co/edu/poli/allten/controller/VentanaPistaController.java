@@ -133,12 +133,13 @@ public class VentanaPistaController {
             ventana.setResizable(false);
             ventana.setScene(escena);
             ventana.showAndWait();
-        } catch (IOException excepcion) {
+        } catch (IOException | RuntimeException excepcion) {
+            excepcion.printStackTrace(); // el detalle completo queda en la consola
             Alert alerta = new Alert(Alert.AlertType.ERROR);
             alerta.setTitle("No se pudo abrir la pista");
             alerta.setHeaderText(null);
             alerta.setContentText("Ocurrió un error al cargar la ventana de pista: "
-                    + excepcion.getMessage());
+                    + excepcion);
             alerta.showAndWait();
         }
     }

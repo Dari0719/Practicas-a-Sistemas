@@ -256,45 +256,75 @@ private void consultarPista() {
 
     @FXML
     private void validarExpresion() {
-        animarPulsacion(btnIgual);
+    animarPulsacion(btnIgual);
         String expresion = campoExpresion.getText();
-        String expresionParaValidar = normalizarOperadores(expresion);
-        ResultadoValidacion resultado = sesion.procesarRespuesta(expresionParaValidar);
 
-        if (resultado == ResultadoValidacion.VALIDO) {
-            int objetivoResuelto = (int) Math.round(
-                    new ValidadorExpresion().calcularResultado(expresionParaValidar));
-            marcarObjetivosResueltos();
-            campoExpresion.clear();
-            objetivoSeleccionado = objetivoResuelto;
-            actualizarObjetivoSeleccionado();
-
-            if (sesion.estaCompleta()) {
-                cronometro.stop();
-                actualizarCronometro();
-                finalizarPartida();
-            } else {
-                mostrarAlerta(
-                        Alert.AlertType.INFORMATION,
-                        "¡Correcto!",
-                        "Resolviste el objetivo " + objetivoResuelto + ".");
-            }
-            return;
-        }
-
-        String mensaje = switch (resultado) {
-            case NUMEROS_INVALIDOS ->
-                "Usa los cuatro números generados exactamente una vez cada uno.";
-            case OPERACION_INVALIDA ->
-                "La operación no es válida. Revisa los operadores y paréntesis.";
-            case RESULTADO_INCORRECTO ->
-                "La expresión es válida, pero su resultado no corresponde a un objetivo pendiente.";
-            case OBJETIVO_YA_RESUELTO ->
-                "Ese objetivo ya fue resuelto o la partida ya terminó.";
-            case VALIDO -> throw new IllegalStateException("Resultado de validación inesperado.");
-        };
-        mostrarAlerta(Alert.AlertType.WARNING, "No se pudo validar", mensaje);
+    // Caso 1: no escribió nada
+    if (expresion == null || expresion.isBlank()) {
+        mostrarAlerta(
+                Alert.AlertType.WARNING,
+                "No se pudo validar",
+                "Pon una operación matemática");
+        campoExpresion.requestFocus();
+        return;
     }
+
+    // Caso 2: escribió números pero ningún signo (por ejemplo 6223)
+    if (!contieneSignoMatematico(expresion)) {
+        mostrarAlerta(
+                Alert.AlertType.WARNING,
+                "No se pudo validar",
+                "Usa un signo matemático que sea válido.");
+        campoExpresion.requestFocus();
+        return;
+    }
+
+    String expresionParaValidar = normalizarOperadores(expresion);
+    ResultadoValidacion resultado = sesion.procesarRespuesta(expresionParaValidar);
+
+    if (resultado == ResultadoValidacion.VALIDO) {
+        int objetivoResuelto = (int) Math.round(
+                new ValidadorExpresion().calcularResultado(expresionParaValidar));
+        marcarObjetivosResueltos();
+        campoExpresion.clear();
+        objetivoSeleccionado = objetivoResuelto;
+        actualizarObjetivoSeleccionado();
+
+        if (sesion.estaCompleta()) {
+            cronometro.stop();
+            actualizarCronometro();
+            finalizarPartida();
+        } else {
+            mostrarAlerta(
+                    Alert.AlertType.INFORMATION,
+                    "¡Correcto!",
+                    "Resolviste el objetivo " + objetivoResuelto + ".");
+        }
+        return;
+    }
+
+    String mensaje = switch (resultado) {
+        case NUMEROS_INVALIDOS ->
+            "Usa los cuatro números generados exactamente una vez cada uno.";
+        case OPERACION_INVALIDA ->
+            "La operación no es válida. Revisa los operadores y paréntesis.";
+        case RESULTADO_INCORRECTO ->
+            "La expresión es válida, pero su resultado no corresponde a un objetivo pendiente.";
+        case OBJETIVO_YA_RESUELTO ->
+            "Ese objetivo ya fue resuelto o la partida ya terminó.";
+        case VALIDO -> throw new IllegalStateException("Resultado de validación inesperado.");
+    };
+    mostrarAlerta(Alert.AlertType.WARNING, "No se pudo validar", mensaje);
+}
+    // Hay signo matemático si aparece alguna operación (los paréntesis solos no cuentan)
+    private boolean contieneSignoMatematico(String expresion) {
+    for (int indice = 0; indice < expresion.length(); indice++) {
+        if ("+-*/×÷^√".indexOf(expresion.charAt(indice)) >= 0) {
+            return true;
+        }
+    }
+    return false;
+}
 
     private void actualizarCronometro() {
         long segundosTotales = sesion.getTiempoTotal() / 1000;

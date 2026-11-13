@@ -87,16 +87,15 @@ public class PantallaResumenController {
         temaButton.setText(GestorTema.esClaro() ? "☾  Tema oscuro" : "☀  Tema claro");
     }
 
-    public void configurarSesion(SesionJuego sesion, Integer posicionRanking, String errorRanking) {}
     /**
-     * Recibe la partida terminada y muestra sus datos en pantalla: el apodo, el
-     * modo y el tiempo total. El tiempo se muestra de dos maneras: en formato
-     * mm:ss y escrito en palabras, usando singular o plural segun corresponda
-     * ("1 minuto", "2 minutos"). Los milisegundos sobrantes se descartan.
+     * Recibe la partida terminada y la posición consultada en el ranking para
+     * mostrar sus datos en pantalla.
      *
      * @param sesion partida que acaba de terminar; no debe ser nula
+     * @param posicionRanking posición de la partida, o {@code null} si no aparece
+     * @param errorRanking detalle del error al consultar la posición, si ocurrió
      */
-    public void configurarSesion(SesionJuego sesion) {
+    public void configurarSesion(SesionJuego sesion, Integer posicionRanking, String errorRanking) {
         this.sesion = sesion;
         this.posicionRanking = posicionRanking;
         this.errorRanking = errorRanking;
@@ -124,6 +123,18 @@ public class PantallaResumenController {
                     ? "¡Estás entre las mejores partidas!"
                     : "Tu partida está fuera del top 10.");
         }
+    }
+
+    /**
+     * Recibe la partida terminada y muestra sus datos en pantalla: el apodo, el
+     * modo y el tiempo total. El tiempo se muestra de dos maneras: en formato
+     * mm:ss y escrito en palabras, usando singular o plural segun corresponda
+     * ("1 minuto", "2 minutos"). Los milisegundos sobrantes se descartan.
+     *
+     * @param sesion partida que acaba de terminar; no debe ser nula
+     */
+    public void configurarSesion(SesionJuego sesion) {
+        configurarSesion(sesion, null, null);
     }
 
     @FXML
